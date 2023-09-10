@@ -6,12 +6,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp" />
+
         <carbon.widget.FloatingActionButton
                 android:id="@+id/add_note"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="50dp"
                 android:background="@color/primary"
                 android:clickable="true"
                 android:focusable="true"
@@ -25,9 +37,9 @@
                 app:carbon_animateEnabledState="true"
                 app:carbon_backgroundTint="@color/primary"
                 app:carbon_elevation="20dp"
-                app:carbon_elevationAmbientShadowColor="@color/primary"
-                app:carbon_elevationShadowColor="@color/primary"
-                app:carbon_elevationSpotShadowColor="@color/primary"
+                app:carbon_elevationAmbientShadowColor="@color/primary_dark"
+                app:carbon_elevationShadowColor="@color/primary_dark"
+                app:carbon_elevationSpotShadowColor="@color/primary_dark"
                 app:carbon_rippleColor="@color/primary_dark"
                 app:carbon_rippleStyle="over"
                 app:carbon_tint="@color/white"

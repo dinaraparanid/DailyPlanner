@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="note"
+                type="com.paranid5.daily_planner.data.Note" />
+    </data>
+
+    <carbon.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:carbon_elevation="20dp"
+            app:carbon_elevationAmbientShadowColor="@color/primary_dark"
+            app:carbon_elevationShadowColor="@color/primary_dark"
+            app:carbon_elevationSpotShadowColor="@color/primary_dark">
+
+        <CheckBox
+                android:id="@+id/isDoneChecker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:checked="@{note.isDone}"
+                android:buttonTint="@color/primary"
+                android:enabled="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/linearLayout"
+                app:layout_constraintStart_toEndOf="@+id/isDoneChecker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="10dp">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:text="@{note.title}"
+                    android:contentDescription="@string/note_title"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            <TextView
+                    android:id="@+id/msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:text="@{note.message}"
+                    android:contentDescription="@string/note_description"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/carbon_grey_400"
+                    android:textSize="12sp" />
+        </LinearLayout>
+    </carbon.widget.ConstraintLayout>
+</layout>
