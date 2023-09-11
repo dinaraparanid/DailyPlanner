@@ -9,4 +9,16 @@
     <string name="date">Date</string>
     <string name="repetition">Repetition</string>
     <string name="ok">OK</string>
+    <string name="note_type">Note Type</string>
+    <string-array name="note_types">
+        <item>Simple</item>
+        <item>Dated</item>
+    </string-array>
+    <string-array name="repetition_type">
+        <item>No repetition</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
 </resources>

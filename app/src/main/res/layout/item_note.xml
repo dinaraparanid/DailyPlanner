@@ -5,7 +5,7 @@
     <data>
         <variable
                 name="note"
-                type="com.paranid5.daily_planner.data.Note" />
+                type="com.paranid5.daily_planner.data.note.Note" />
     </data>
 
     <carbon.widget.ConstraintLayout

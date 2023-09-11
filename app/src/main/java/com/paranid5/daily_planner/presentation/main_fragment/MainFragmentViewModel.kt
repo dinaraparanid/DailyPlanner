@@ -1,7 +1,7 @@
 package com.paranid5.daily_planner.presentation.main_fragment
 
 import androidx.lifecycle.LiveData
-import com.paranid5.daily_planner.data.Note
+import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.presentation.ObservableViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

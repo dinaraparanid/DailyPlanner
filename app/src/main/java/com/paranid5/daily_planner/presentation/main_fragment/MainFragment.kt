@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paranid5.daily_planner.R
-import com.paranid5.daily_planner.data.Note
+import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.databinding.FragmentMainBinding
 import com.paranid5.daily_planner.databinding.ItemNoteBinding
 import com.paranid5.daily_planner.presentation.UIStateChangesObserver

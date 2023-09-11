@@ -1,7 +1,7 @@
 package com.paranid5.daily_planner.di
 
 import androidx.lifecycle.MutableLiveData
-import com.paranid5.daily_planner.data.Note
+import com.paranid5.daily_planner.data.note.Note
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
