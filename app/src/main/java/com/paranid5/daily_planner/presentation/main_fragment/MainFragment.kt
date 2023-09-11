@@ -9,12 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.data.Note
 import com.paranid5.daily_planner.databinding.FragmentMainBinding
 import com.paranid5.daily_planner.databinding.ItemNoteBinding
 import com.paranid5.daily_planner.presentation.UIStateChangesObserver
+import com.paranid5.daily_planner.presentation.utils.decorations.VerticalSpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,12 +30,22 @@ class MainFragment : Fragment(), UIStateChangesObserver {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentMainBinding?>(
             inflater,
             R.layout.fragment_main,
             container,
             false
-        )
+        ).apply {
+            addNote.setOnClickListener {
+                viewModel.handler.onAddNoteButtonClicked(childFragmentManager)
+            }
+
+            notesList.also {
+                it.layoutManager = LinearLayoutManager(context)
+                it.adapter = adapter
+                it.addItemDecoration(VerticalSpaceItemDecoration(30))
+            }
+        }
 
         observeUIStateChanges()
         return binding.root
@@ -43,16 +55,15 @@ class MainFragment : Fragment(), UIStateChangesObserver {
         viewModel.notesState.observe(viewLifecycleOwner, adapter::submitList)
 
     private class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesHolder>() {
-        private val differ = AsyncListDiffer(
-            this,
-            object : DiffUtil.ItemCallback<Note>() {
+        private val differ by lazy {
+            AsyncListDiffer(this, object : DiffUtil.ItemCallback<Note>() {
                 override fun areItemsTheSame(oldItem: Note, newItem: Note) =
                     oldItem.id == newItem.id
 
                 override fun areContentsTheSame(oldItem: Note, newItem: Note) =
                     oldItem == newItem
-            }
-        )
+            })
+        }
 
         private class NotesHolder(private val noteBinding: ItemNoteBinding) :
             RecyclerView.ViewHolder(noteBinding.root) {
@@ -63,9 +74,8 @@ class MainFragment : Fragment(), UIStateChangesObserver {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NotesHolder(
-            DataBindingUtil.inflate(
+            ItemNoteBinding.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_note,
                 parent,
                 false
             )

@@ -11,10 +11,12 @@
     <carbon.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:carbon_elevation="20dp"
-            app:carbon_elevationAmbientShadowColor="@color/primary_dark"
-            app:carbon_elevationShadowColor="@color/primary_dark"
-            app:carbon_elevationSpotShadowColor="@color/primary_dark">
+            app:carbon_elevation="4dp"
+            app:carbon_elevationAmbientShadowColor="@color/primary"
+            app:carbon_elevationShadowColor="@color/primary"
+            app:carbon_elevationSpotShadowColor="@color/primary"
+            app:carbon_rippleColor="@color/primary"
+            app:carbon_rippleStyle="over">
 
         <CheckBox
                 android:id="@+id/isDoneChecker"
@@ -26,15 +28,19 @@
                 android:checked="@{note.isDone}"
                 android:buttonTint="@color/primary"
                 android:enabled="true"
+                android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:id="@+id/linearLayout"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintStart_toEndOf="@+id/isDoneChecker"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

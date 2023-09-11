@@ -9,9 +9,9 @@ data class Note(
     @JvmField val id: Int,
     @JvmField val title: String,
     @JvmField val description: String,
-    @JvmField val date: LocalDateTime?,
-    @JvmField val repetition: Repetition,
-    @JvmField val isDone: Boolean
+    @JvmField val date: LocalDateTime? = null,
+    @JvmField val repetition: Repetition = Repetition.NoRepetition,
+    @JvmField val isDone: Boolean = false
 ) : Parcelable {
     companion object CREATOR : Parcelable.Creator<Note> {
         override fun createFromParcel(parcel: Parcel) = Note(parcel)

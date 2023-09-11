@@ -3,4 +3,10 @@
     <string name="add_note">Add note</string>
     <string name="note_title">Note title</string>
     <string name="note_description">Note description</string>
+    <string name="new_note">New Note</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="repetition">Repetition</string>
+    <string name="ok">OK</string>
 </resources>
