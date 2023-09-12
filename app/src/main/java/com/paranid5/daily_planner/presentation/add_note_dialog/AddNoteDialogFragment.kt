@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.paranid5.daily_planner.R
+import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.databinding.DialogAddNoteBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +18,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddNoteDialogFragment : DialogFragment() {
     companion object {
         val TAG = AddNoteDialogFragment::class.simpleName!!
+        const val NOTES_TYPE_ARG = "notes_type"
+
+        fun newInstance(noteType: NoteType) = AddNoteDialogFragment().apply {
+            arguments = Bundle().apply {
+                putInt(NOTES_TYPE_ARG, noteType.ordinal)
+            }
+        }
     }
 
     private val viewModel by viewModels<AddNoteViewModel>()
@@ -68,6 +76,7 @@ class AddNoteDialogFragment : DialogFragment() {
         binding.typeSpinner.run {
             adapter = typeSpinnerAdapter
             onItemSelectedListener = typeSpinnerListener
+            setSelection(requireArguments().getInt(NOTES_TYPE_ARG))
         }
 
         binding.repetitionSpinner.run {

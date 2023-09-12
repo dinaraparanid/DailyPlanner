@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.presentation.main_fragment.MainFragment
+import com.paranid5.daily_planner.presentation.notes_fragments.simple_notes.SimpleNotesFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

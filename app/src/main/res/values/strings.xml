@@ -10,6 +10,8 @@
     <string name="repetition">Repetition</string>
     <string name="ok">OK</string>
     <string name="note_type">Note Type</string>
+    <string name="simple">Simple</string>
+    <string name="dated">Dated</string>
     <string-array name="note_types">
         <item>Simple</item>
         <item>Dated</item>

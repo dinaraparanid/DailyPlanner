@@ -6,24 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayoutMediator
 import com.paranid5.daily_planner.R
-import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.databinding.FragmentMainBinding
-import com.paranid5.daily_planner.databinding.ItemNoteBinding
-import com.paranid5.daily_planner.presentation.UIStateChangesObserver
-import com.paranid5.daily_planner.presentation.utils.decorations.VerticalSpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : Fragment(), UIStateChangesObserver {
+class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private val viewModel by viewModels<MainFragmentViewModel>()
-    private val adapter = NotesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,57 +25,22 @@ class MainFragment : Fragment(), UIStateChangesObserver {
             R.layout.fragment_main,
             container,
             false
-        ).apply {
-            addNote.setOnClickListener {
-                viewModel.handler.onAddNoteButtonClicked(childFragmentManager)
-            }
+        )
 
-            notesList.also {
-                it.layoutManager = LinearLayoutManager(context)
-                it.adapter = adapter
-                it.addItemDecoration(VerticalSpaceItemDecoration(30))
-            }
-        }
-
-        observeUIStateChanges()
         return binding.root
     }
 
-    override fun observeUIStateChanges() =
-        viewModel.notesState.observe(viewLifecycleOwner, adapter::submitList)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.notesPager.adapter = MainPagerAdapter(requireActivity())
 
-    private class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesHolder>() {
-        private val differ by lazy {
-            AsyncListDiffer(this, object : DiffUtil.ItemCallback<Note>() {
-                override fun areItemsTheSame(oldItem: Note, newItem: Note) =
-                    oldItem.id == newItem.id
-
-                override fun areContentsTheSame(oldItem: Note, newItem: Note) =
-                    oldItem == newItem
-            })
-        }
-
-        private class NotesHolder(private val noteBinding: ItemNoteBinding) :
-            RecyclerView.ViewHolder(noteBinding.root) {
-            fun bind(note: Note) {
-                noteBinding.note = note
-                noteBinding.executePendingBindings()
-            }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NotesHolder(
-            ItemNoteBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+        TabLayoutMediator(binding.tabLayout, binding.notesPager) { tab, position ->
+            tab.setText(
+                when (position) {
+                    0 -> R.string.simple
+                    1 -> R.string.dated
+                    else -> throw IllegalArgumentException("Illegal position in pager's tab")
+                }
             )
-        )
-
-        override fun onBindViewHolder(holder: NotesHolder, position: Int) =
-            holder.bind(differ.currentList[position])
-
-        override fun getItemCount() = differ.currentList.size
-
-        fun submitList(newNotes: List<Note>) = differ.submitList(newNotes)
+        }.attach()
     }
 }

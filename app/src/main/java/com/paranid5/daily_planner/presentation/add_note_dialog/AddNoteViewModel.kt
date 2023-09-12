@@ -4,8 +4,10 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import com.paranid5.daily_planner.data.Repetition
+import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.NoteType
+import com.paranid5.daily_planner.data.note.SimpleNote
 import com.paranid5.daily_planner.di.AddNotePresenterFactory
 import com.paranid5.daily_planner.presentation.ObservableViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,16 +33,28 @@ class AddNoteViewModel @Inject constructor(
         repetitionState = savedStateHandle.getLiveData(REPETITION, Repetition.NoRepetition)
     )
 
-    inline val notesState: LiveData<List<Note>>
-        get() = presenter.notesState
+    inline val simpleNotesState: LiveData<List<SimpleNote>>
+        get() = presenter.simpleNotesState
 
-    inline val notes
-        get() = notesState.value!!
+    inline val datedNotesState: LiveData<List<DatedNote>>
+        get() = presenter.datedNotesState
 
-    fun postNotes(notes: List<Note>) =
-        presenter.notesState.postValue(notes)
+    inline val simpleNotes
+        get() = simpleNotesState.value!!
 
-    fun addNote(note: Note) = postNotes(notes + note)
+    inline val datedNotes
+        get() = datedNotesState.value!!
+
+    fun postSimpleNotes(notes: List<SimpleNote>) =
+        presenter.simpleNotesState.postValue(notes)
+
+    fun postDatedNotes(notes: List<DatedNote>) =
+        presenter.datedNotesState.postValue(notes)
+
+    fun addNote(note: Note) = when (note) {
+        is SimpleNote -> postSimpleNotes(simpleNotes + note)
+        is DatedNote -> postDatedNotes(datedNotes + note)
+    }
 
     inline val noteTypeState: LiveData<NoteType>
         get() = presenter.noteTypeState

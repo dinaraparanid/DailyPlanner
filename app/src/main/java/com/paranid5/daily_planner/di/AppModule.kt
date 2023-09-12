@@ -1,7 +1,8 @@
 package com.paranid5.daily_planner.di
 
 import androidx.lifecycle.MutableLiveData
-import com.paranid5.daily_planner.data.note.Note
+import com.paranid5.daily_planner.data.note.DatedNote
+import com.paranid5.daily_planner.data.note.SimpleNote
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +14,11 @@ import javax.inject.Singleton
 class AppModule {
     @Singleton
     @Provides
-    @NotesState
-    fun provideNotesState() = MutableLiveData<List<Note>>(listOf())
+    @SimpleNotesState
+    fun provideSimpleNotesState() = MutableLiveData<List<SimpleNote>>(listOf())
+
+    @Singleton
+    @Provides
+    @DatedNotesState
+    fun provideDatedNotesState() = MutableLiveData<List<DatedNote>>(listOf())
 }

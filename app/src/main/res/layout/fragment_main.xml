@@ -1,54 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <carbon.widget.ConstraintLayout
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <carbon.widget.RecyclerView
-                android:id="@+id/notes_list"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_height="wrap_content"
+                android:background="@color/synthwave_pink"
+                app:tabIndicatorColor="@color/synthwave_orange"
+                app:tabSelectedTextColor="@color/synthwave_yellow"/>
 
-        <carbon.widget.FloatingActionButton
-                android:id="@+id/add_note"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginBottom="50dp"
-                android:background="@color/primary"
-                android:clickable="true"
-                android:focusable="true"
-                android:outlineProvider="bounds"
-                android:scaleType="centerCrop"
-                android:src="@drawable/plus"
-                android:padding="10dp"
-                android:contentDescription="@string/add_note"
-                app:borderWidth="0dp"
-                app:carbon_animateColorChanges="true"
-                app:carbon_animateEnabledState="true"
-                app:carbon_backgroundTint="@color/primary"
-                app:carbon_elevation="20dp"
-                app:carbon_elevationAmbientShadowColor="@color/primary_dark"
-                app:carbon_elevationShadowColor="@color/primary_dark"
-                app:carbon_elevationSpotShadowColor="@color/primary_dark"
-                app:carbon_rippleColor="@color/primary_dark"
-                app:carbon_rippleStyle="over"
-                app:carbon_tint="@color/white"
-                app:fabSize="auto"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:rippleColor="@color/primary_dark"
-                app:carbon_cornerRadius="25dp" />
-
-    </carbon.widget.ConstraintLayout>
+        <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/notes_pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+    </LinearLayout>
 </layout>
