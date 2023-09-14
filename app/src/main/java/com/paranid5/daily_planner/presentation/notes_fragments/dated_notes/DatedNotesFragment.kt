@@ -14,12 +14,16 @@ import com.paranid5.daily_planner.presentation.UIStateChangesObserver
 import com.paranid5.daily_planner.presentation.notes_fragments.NotesAdapter
 import com.paranid5.daily_planner.presentation.utils.decorations.VerticalSpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DatedNotesFragment : Fragment(), UIStateChangesObserver {
+    @Inject
+    lateinit var adapter: NotesAdapter
+
     private lateinit var binding: FragmentNotesBinding
+
     private val viewModel by viewModels<DatedNotesViewModel>()
-    private val adapter = NotesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -6,9 +6,17 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.paranid5.daily_planner.data.note.Note
+import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.databinding.ItemNoteBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesHolder>() {
+class NotesAdapter @Inject constructor(private val notesRepository: NotesRepository) :
+    RecyclerView.Adapter<NotesAdapter.NotesHolder>(),
+    CoroutineScope by MainScope() {
     private val differ by lazy {
         AsyncListDiffer(this, object : DiffUtil.ItemCallback<Note>() {
             override fun areItemsTheSame(oldItem: Note, newItem: Note) =
@@ -19,10 +27,15 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesHolder>() {
         })
     }
 
-    class NotesHolder(private val noteBinding: ItemNoteBinding) :
+    inner class NotesHolder(private val noteBinding: ItemNoteBinding) :
         RecyclerView.ViewHolder(noteBinding.root) {
         fun bind(note: Note) {
             noteBinding.note = note
+
+            noteBinding.isDoneChecker.setOnCheckedChangeListener { _, isChecked ->
+                launch(Dispatchers.IO) { notesRepository.changeChecked(note, isChecked) }
+            }
+
             noteBinding.executePendingBindings()
         }
     }

@@ -3,6 +3,7 @@ package com.paranid5.daily_planner.data.room.notes
 import android.content.Context
 import androidx.room.Room
 import com.paranid5.daily_planner.data.note.DatedNote
+import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.SimpleNote
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
@@ -35,6 +36,9 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
     internal suspend inline fun update(vararg initials: SimpleNote, upd: (SimpleNote) -> SimpleNote) =
         initials.map(upd).forEach { simpleNotesDao.update(it) }
 
+    internal suspend inline fun changeChecked(note: SimpleNote, isChecked: Boolean) =
+        update(note) { it.copy(isDone = isChecked) }
+
     internal suspend inline fun delete(note: SimpleNote) =
         simpleNotesDao.delete(note)
 
@@ -51,6 +55,14 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
             .map { upd(it).entity }
             .forEach { datedNotesDao.update(it) }
 
+    internal suspend inline fun changeChecked(note: DatedNote, isChecked: Boolean) =
+        update(note) { it.copy(isDone = isChecked) }
+
     internal suspend inline fun delete(note: DatedNote) =
         datedNotesDao.delete(note.entity)
+
+    internal suspend inline fun changeChecked(note: Note, isChecked: Boolean) = when (note) {
+        is DatedNote -> changeChecked(note, isChecked)
+        is SimpleNote -> changeChecked(note, isChecked)
+    }
 }
