@@ -3,11 +3,12 @@ package com.paranid5.daily_planner.presentation.add_note_dialog
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
-import com.paranid5.daily_planner.data.Repetition
+import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.data.note.SimpleNote
+import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.di.AddNotePresenterFactory
 import com.paranid5.daily_planner.presentation.ObservableViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class AddNoteViewModel @Inject constructor(
     presenterFactory: AddNotePresenterFactory,
     override val handler: AddNoteUIHandler,
+    private val notesRepository: NotesRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ObservableViewModel<AddNotePresenter, AddNoteUIHandler>() {
     private companion object {
@@ -45,15 +47,15 @@ class AddNoteViewModel @Inject constructor(
     inline val datedNotes
         get() = datedNotesState.value!!
 
-    fun postSimpleNotes(notes: List<SimpleNote>) =
-        presenter.simpleNotesState.postValue(notes)
+    private suspend inline fun addSimpleNotes(notes: List<SimpleNote>) =
+        notesRepository.insert(*notes.toTypedArray())
 
-    fun postDatedNotes(notes: List<DatedNote>) =
-        presenter.datedNotesState.postValue(notes)
+    private suspend inline fun addDatedNotes(notes: List<DatedNote>) =
+        notesRepository.insert(*notes.toTypedArray())
 
-    fun addNote(note: Note) = when (note) {
-        is SimpleNote -> postSimpleNotes(simpleNotes + note)
-        is DatedNote -> postDatedNotes(datedNotes + note)
+    internal suspend inline fun addNote(note: Note) = when (note) {
+        is SimpleNote -> addSimpleNotes(simpleNotes + note)
+        is DatedNote -> addDatedNotes(datedNotes + note)
     }
 
     inline val noteTypeState: LiveData<NoteType>

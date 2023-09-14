@@ -20,7 +20,7 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentMainBinding?>(
+        binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_main,
             container,

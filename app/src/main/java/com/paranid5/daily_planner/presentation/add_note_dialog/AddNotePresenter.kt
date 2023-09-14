@@ -5,7 +5,7 @@ import androidx.annotation.MainThread
 import androidx.databinding.Bindable
 import androidx.lifecycle.MutableLiveData
 import com.paranid5.daily_planner.BR
-import com.paranid5.daily_planner.data.Repetition
+import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.data.note.SimpleNote

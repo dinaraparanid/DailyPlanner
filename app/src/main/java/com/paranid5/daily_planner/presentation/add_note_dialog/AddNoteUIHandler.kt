@@ -1,6 +1,6 @@
 package com.paranid5.daily_planner.presentation.add_note_dialog
 
-import com.paranid5.daily_planner.data.Repetition
+import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.data.note.SimpleNote
@@ -16,9 +16,9 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
     }
 
     fun setRepetition(viewModel: AddNoteViewModel, position: Int) =
-        viewModel.postRepetition(Repetition.fromIndex(position))
+        viewModel.postRepetition(Repetition.fromOrdinal(position))
 
-    fun addNote(viewModel: AddNoteViewModel) = viewModel.addNote(
+    internal suspend inline fun addNote(viewModel: AddNoteViewModel) = viewModel.addNote(
         when (viewModel.noteType) {
             NoteType.SIMPLE -> SimpleNote(
                 id = Random.nextInt(),

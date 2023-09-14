@@ -9,10 +9,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.databinding.DialogAddNoteBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddNoteDialogFragment : DialogFragment() {
@@ -88,7 +91,10 @@ class AddNoteDialogFragment : DialogFragment() {
             .setCancelable(true)
             .setView(binding.root)
             .setPositiveButton(R.string.ok) { dialog, _ ->
-                viewModel.handler.addNote(viewModel)
+                viewModel.viewModelScope.launch(Dispatchers.IO) {
+                    viewModel.handler.addNote(viewModel)
+                }
+
                 dialog.dismiss()
             }
             .create()
