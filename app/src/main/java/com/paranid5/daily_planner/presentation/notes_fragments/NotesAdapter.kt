@@ -1,5 +1,6 @@
 package com.paranid5.daily_planner.presentation.notes_fragments
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -8,14 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.databinding.ItemNoteBinding
+import io.noties.markwon.Markwon
+import io.noties.markwon.ext.latex.JLatexMathPlugin
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tasklist.TaskListPlugin
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class NotesAdapter @Inject constructor(private val notesRepository: NotesRepository) :
-    RecyclerView.Adapter<NotesAdapter.NotesHolder>(),
+class NotesAdapter(
+    context: Context,
+    private val notesRepository: NotesRepository
+) : RecyclerView.Adapter<NotesAdapter.NotesHolder>(),
     CoroutineScope by MainScope() {
     private val differ by lazy {
         AsyncListDiffer(this, object : DiffUtil.ItemCallback<Note>() {
@@ -27,10 +34,26 @@ class NotesAdapter @Inject constructor(private val notesRepository: NotesReposit
         })
     }
 
+    private val markwon by lazy {
+        Markwon
+            .builder(context)
+            .usePlugins(
+                listOf(
+                    StrikethroughPlugin.create(),
+                    JLatexMathPlugin.create(13F),
+                    TablePlugin.create(context),
+                    TaskListPlugin.create(context)
+                )
+            )
+            .build()
+    }
+
     inner class NotesHolder(private val noteBinding: ItemNoteBinding) :
         RecyclerView.ViewHolder(noteBinding.root) {
         fun bind(note: Note) {
             noteBinding.note = note
+
+            markwon.setMarkdown(noteBinding.msg, note.message)
 
             noteBinding.isDoneChecker.setOnCheckedChangeListener { _, isChecked ->
                 launch(Dispatchers.IO) { notesRepository.changeChecked(note, isChecked) }

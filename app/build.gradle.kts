@@ -72,5 +72,22 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
 
+    arrayOf(
+        "io.noties.markwon:core:4.6.2",
+        "io.noties.markwon:editor:4.6.2",
+        "io.noties.markwon:ext-latex:4.6.2",
+        "io.noties.markwon:ext-strikethrough:4.6.2",
+        "io.noties.markwon:ext-tables:4.6.2",
+        "io.noties.markwon:ext-tasklist:4.6.2",
+        "io.noties.markwon:html:4.6.2",
+        "io.noties.markwon:image:4.6.2",
+        "io.noties.markwon:image-picasso:4.6.2",
+        "io.noties.markwon:syntax-highlight:4.6.2"
+    ).forEach {
+        implementation(it) {
+            exclude(group = "org.jetbrains", module = "annotations-java5")
+        }
+    }
+
     api("tk.zielony:carbon:0.17.0")
 }

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -14,8 +16,16 @@ import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.databinding.DialogAddNoteBinding
 import dagger.hilt.android.AndroidEntryPoint
+import io.noties.markwon.Markwon
+import io.noties.markwon.editor.MarkwonEditor
+import io.noties.markwon.editor.MarkwonEditorTextWatcher
+import io.noties.markwon.ext.latex.JLatexMathPlugin
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tasklist.TaskListPlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 @AndroidEntryPoint
 class AddNoteDialogFragment : DialogFragment() {
@@ -75,17 +85,9 @@ class AddNoteDialogFragment : DialogFragment() {
         )
 
         binding.viewModel = viewModel
-
-        binding.typeSpinner.run {
-            adapter = typeSpinnerAdapter
-            onItemSelectedListener = typeSpinnerListener
-            setSelection(requireArguments().getInt(NOTES_TYPE_ARG))
-        }
-
-        binding.repetitionSpinner.run {
-            adapter = repetitionAdapter
-            onItemSelectedListener = repetitionListener
-        }
+        binding.typeSpinner.initTypeSpinner()
+        binding.repetitionSpinner.initRepetitionSpinner()
+        binding.descriptionInput.initMarkwonEditor()
 
         return AlertDialog.Builder(requireContext())
             .setCancelable(true)
@@ -105,4 +107,39 @@ class AddNoteDialogFragment : DialogFragment() {
 
     internal fun mSetRepetition(position: Int) =
         viewModel.handler.setRepetition(viewModel, position)
+
+    private fun Spinner.initTypeSpinner() {
+        adapter = typeSpinnerAdapter
+        onItemSelectedListener = typeSpinnerListener
+        setSelection(requireArguments().getInt(NOTES_TYPE_ARG))
+    }
+
+    private fun Spinner.initRepetitionSpinner() {
+        adapter = repetitionAdapter
+        onItemSelectedListener = repetitionListener
+    }
+
+    private fun EditText.initMarkwonEditor() {
+        val markwon = Markwon
+            .builder(requireContext())
+            .usePlugins(
+                listOf(
+                    StrikethroughPlugin.create(),
+                    JLatexMathPlugin.create(13F),
+                    TablePlugin.create(context),
+                    TaskListPlugin.create(context)
+                )
+            )
+            .build()
+
+        val editor = MarkwonEditor.create(markwon)
+
+        addTextChangedListener(
+            MarkwonEditorTextWatcher.withPreRender(
+                editor,
+                Executors.newCachedThreadPool(),
+                this
+            )
+        )
+    }
 }

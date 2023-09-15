@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.paranid5.daily_planner.R
+import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.databinding.FragmentNotesBinding
 import com.paranid5.daily_planner.presentation.UIStateChangesObserver
 import com.paranid5.daily_planner.presentation.notes_fragments.NotesAdapter
@@ -19,11 +20,15 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SimpleNotesFragment : Fragment(), UIStateChangesObserver {
     @Inject
-    lateinit var adapter: NotesAdapter
+    lateinit var notesRepository: NotesRepository
 
     private lateinit var binding: FragmentNotesBinding
 
     private val viewModel by viewModels<SimpleNotesViewModel>()
+
+    private val adapter by lazy {
+        NotesAdapter(requireContext(), notesRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
