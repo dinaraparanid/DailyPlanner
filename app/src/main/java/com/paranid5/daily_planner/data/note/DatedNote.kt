@@ -26,7 +26,7 @@ data class DatedNote(
     @ColumnInfo("is_done") override val isDone: Boolean = false,
     @JvmField val date: LocalDateTime = currentTime,
     @JvmField val repetition: Repetition = Repetition.NoRepetition,
-) : Note, Parcelable {
+) : Note {
     companion object CREATOR : Parcelable.Creator<DatedNote> {
         override fun createFromParcel(parcel: Parcel) = DatedNote(parcel)
         override fun newArray(size: Int): Array<DatedNote?> = arrayOfNulls(size)

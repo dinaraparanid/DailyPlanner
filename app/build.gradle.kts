@@ -82,12 +82,15 @@ dependencies {
         "io.noties.markwon:html:4.6.2",
         "io.noties.markwon:image:4.6.2",
         "io.noties.markwon:image-picasso:4.6.2",
-        "io.noties.markwon:syntax-highlight:4.6.2"
+        "io.noties.markwon:syntax-highlight:4.6.2",
+        "io.noties:prism4j:2.0.0"
     ).forEach {
         implementation(it) {
             exclude(group = "org.jetbrains", module = "annotations-java5")
         }
     }
+
+    kapt("io.noties:prism4j-bundler:2.0.0")
 
     api("tk.zielony:carbon:0.17.0")
 }

@@ -2,6 +2,7 @@ package com.paranid5.daily_planner.presentation.notes_fragments
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -21,7 +22,8 @@ import kotlinx.coroutines.launch
 
 class NotesAdapter(
     context: Context,
-    private val notesRepository: NotesRepository
+    private val notesRepository: NotesRepository,
+    private val onItemClicked: (Note) -> Unit = {}
 ) : RecyclerView.Adapter<NotesAdapter.NotesHolder>(),
     CoroutineScope by MainScope() {
     private val differ by lazy {
@@ -34,7 +36,7 @@ class NotesAdapter(
         })
     }
 
-    private val markwon by lazy {
+    internal val mMarkwon by lazy {
         Markwon
             .builder(context)
             .usePlugins(
@@ -53,14 +55,18 @@ class NotesAdapter(
         fun bind(note: Note) {
             noteBinding.note = note
 
-            markwon.setMarkdown(noteBinding.msg, note.message)
+            mMarkwon.setMarkdown(noteBinding.msg, note.message)
+            noteBinding.msg.setOnClickListener { onClicked() }
 
             noteBinding.isDoneChecker.setOnCheckedChangeListener { _, isChecked ->
                 launch(Dispatchers.IO) { notesRepository.changeChecked(note, isChecked) }
             }
 
+            noteBinding.root.setOnClickListener { onClicked() }
             noteBinding.executePendingBindings()
         }
+
+        private fun onClicked() = onItemClicked(noteBinding.note!!)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NotesHolder(

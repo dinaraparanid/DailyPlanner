@@ -15,7 +15,7 @@ import com.paranid5.daily_planner.presentation.ObservablePresenter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
-class AddNotePresenter @AssistedInject constructor(
+data class AddNotePresenter @AssistedInject constructor(
     @SimpleNotesState val simpleNotesState: MutableLiveData<List<SimpleNote>>,
     @DatedNotesState val datedNotesState: MutableLiveData<List<DatedNote>>,
     @Assisted("note_type") val noteTypeState: MutableLiveData<NoteType>,

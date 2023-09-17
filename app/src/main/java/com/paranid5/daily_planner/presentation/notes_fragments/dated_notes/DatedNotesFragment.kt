@@ -18,6 +18,7 @@ import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.databinding.FragmentNotesBinding
 import com.paranid5.daily_planner.di.DatedNotesState
 import com.paranid5.daily_planner.presentation.UIStateChangesObserver
+import com.paranid5.daily_planner.presentation.note_details_dialog.NoteDetailsDialogFragment
 import com.paranid5.daily_planner.presentation.notes_fragments.NotesAdapter
 import com.paranid5.daily_planner.presentation.notes_fragments.NotesTouchHandler
 import com.paranid5.daily_planner.presentation.utils.decorations.VerticalSpaceItemDecoration
@@ -38,10 +39,15 @@ class DatedNotesFragment : Fragment(), UIStateChangesObserver {
     private val viewModel by viewModels<DatedNotesViewModel>()
 
     private val adapter by lazy {
-        NotesAdapter(requireContext(), notesRepository)
+        NotesAdapter(requireContext(), notesRepository) {
+            NoteDetailsDialogFragment
+                .newInstance(it)
+                .show(childFragmentManager, NoteDetailsDialogFragment.TAG)
+        }
     }
 
     private val touchHelper by lazy {
+        @Suppress("UNCHECKED_CAST")
         ItemTouchHelper(
             NotesTouchHandler(
                 datedNotesState as LiveData<List<Note>>,

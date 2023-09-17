@@ -4,14 +4,21 @@
     <string name="note_title">Note title</string>
     <string name="note_description">Note description</string>
     <string name="new_note">New Note</string>
-    <string name="title">Title</string>
-    <string name="description">Description</string>
-    <string name="date">Date</string>
-    <string name="repetition">Repetition</string>
+    <string name="title">Title:</string>
+    <string name="description">Description:</string>
+    <string name="date">Date:</string>
+    <string name="repetition">Repetition:</string>
     <string name="ok">OK</string>
-    <string name="note_type">Note Type</string>
+    <string name="note_type">Note Type:</string>
     <string name="simple">Simple</string>
     <string name="dated">Dated</string>
+    <string name="details">Details</string>
+    <string name="edit">Edit</string>
+    <string name="no_repetition">No repetition</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
     <string-array name="note_types">
         <item>Simple</item>
         <item>Dated</item>

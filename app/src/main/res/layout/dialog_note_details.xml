@@ -4,7 +4,7 @@
     <data>
         <variable
                 name="view_model"
-                type="com.paranid5.daily_planner.presentation.add_note_dialog.AddNoteViewModel" />
+                type="com.paranid5.daily_planner.presentation.note_details_dialog.NoteDetailsViewModel"/>
     </data>
 
     <LinearLayout
@@ -16,7 +16,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/new_note"
+                android:text="@{view_model.note.title}"
                 android:textSize="16sp"
                 android:textColor="@color/primary"
                 android:textAlignment="center"
@@ -33,64 +33,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="vertical">
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:text="@string/note_type"
-                        android:textSize="13sp"
-                        android:textStyle="bold"/>
-
-                <Spinner
-                        android:id="@+id/type_spinner"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:gravity="center" />
-            </LinearLayout>
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:text="@string/title"
-                        android:textSize="13sp"
-                        android:textStyle="bold"/>
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/title_input"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:minHeight="50dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="13sp"
-                        android:maxLines="1"
-                        android:onTextChanged="@{(txt, start, before, cnt) -> view_model.postTitleInput(txt)}"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="@{view_model.presenter.dateElementsVisibility}"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="@{view_model.dateElementsVisibility}">
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -102,25 +51,24 @@
                         android:textSize="13sp"
                         android:textStyle="bold"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/date_picker_launcher"
+                <TextView
+                        android:id="@+id/date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:minHeight="50dp"
                         android:layout_weight="1"
+                        android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
+                        android:text="@{view_model.dateMessage}"
                         android:textSize="13sp"
-                        android:maxLines="1"
-                        android:inputType="datetime"
-                        android:visibility="@{view_model.presenter.dateElementsVisibility}"/>
+                        android:textIsSelectable="true" />
             </LinearLayout>
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:visibility="@{view_model.presenter.dateElementsVisibility}"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="@{view_model.dateElementsVisibility}">
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -130,15 +78,18 @@
                         android:layout_marginEnd="10dp"
                         android:text="@string/repetition"
                         android:textSize="13sp"
-                        android:visibility="@{view_model.presenter.dateElementsVisibility}"
                         android:textStyle="bold"/>
 
-                <Spinner
-                        android:id="@+id/repetition_spinner"
+                <TextView
+                        android:id="@+id/repetition"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="@{view_model.presenter.dateElementsVisibility}"/>
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:text="@{view_model.repetitionMessage}"
+                        android:textSize="13sp"
+                        android:textIsSelectable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -157,15 +108,15 @@
                         android:textSize="13sp"
                         android:textStyle="bold"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/description_input"
+                <TextView
+                        android:id="@+id/description"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:minHeight="50dp"
                         android:layout_weight="1"
+                        android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
                         android:textSize="13sp"
-                        android:onTextChanged="@{(txt, start, before, cnt) -> view_model.postDescriptionInput(txt)}"/>
+                        android:textIsSelectable="true" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

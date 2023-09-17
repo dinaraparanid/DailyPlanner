@@ -34,9 +34,7 @@ class AddNoteDialogFragment : DialogFragment() {
         const val NOTES_TYPE_ARG = "notes_type"
 
         fun newInstance(noteType: NoteType) = AddNoteDialogFragment().apply {
-            arguments = Bundle().apply {
-                putInt(NOTES_TYPE_ARG, noteType.ordinal)
-            }
+            arguments = Bundle().apply { putInt(NOTES_TYPE_ARG, noteType.ordinal) }
         }
     }
 

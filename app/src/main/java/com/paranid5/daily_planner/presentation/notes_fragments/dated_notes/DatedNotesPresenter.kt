@@ -6,6 +6,6 @@ import com.paranid5.daily_planner.di.DatedNotesState
 import com.paranid5.daily_planner.presentation.BasePresenter
 import javax.inject.Inject
 
-class DatedNotesPresenter @Inject constructor(
+data class DatedNotesPresenter @Inject constructor(
     @DatedNotesState val notesState: MutableLiveData<List<DatedNote>>
 ) : BasePresenter

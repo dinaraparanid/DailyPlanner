@@ -1,6 +1,8 @@
 package com.paranid5.daily_planner.data.note
 
-sealed interface Note {
+import android.os.Parcelable
+
+sealed interface Note : Parcelable {
     val id: Int
     val title: String
     val description: String
