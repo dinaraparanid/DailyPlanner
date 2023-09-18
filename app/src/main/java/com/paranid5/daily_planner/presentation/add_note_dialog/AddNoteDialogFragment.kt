@@ -2,11 +2,6 @@ package com.paranid5.daily_planner.presentation.add_note_dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -14,18 +9,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.data.note.NoteType
+import com.paranid5.daily_planner.data.note.Repetition
+import com.paranid5.daily_planner.data.note.ordinal
 import com.paranid5.daily_planner.databinding.DialogAddNoteBinding
+import com.paranid5.daily_planner.presentation.utils.ext.initMarkwonEditor
+import com.paranid5.daily_planner.presentation.utils.ext.initRepetitionSpinner
+import com.paranid5.daily_planner.presentation.utils.ext.initTypeSpinner
 import dagger.hilt.android.AndroidEntryPoint
-import io.noties.markwon.Markwon
-import io.noties.markwon.editor.MarkwonEditor
-import io.noties.markwon.editor.MarkwonEditorTextWatcher
-import io.noties.markwon.ext.latex.JLatexMathPlugin
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
-import io.noties.markwon.ext.tables.TablePlugin
-import io.noties.markwon.ext.tasklist.TaskListPlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 
 @AndroidEntryPoint
 class AddNoteDialogFragment : DialogFragment() {
@@ -40,52 +32,29 @@ class AddNoteDialogFragment : DialogFragment() {
 
     private val viewModel by viewModels<AddNoteViewModel>()
 
-    private inline val typeSpinnerAdapter
-        get() = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.note_types,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-
-    private inline val typeSpinnerListener
-        get() = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
-                mSetNoteType(position)
-
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-        }
-
-    private inline val repetitionAdapter
-        get() = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.repetition_type,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-
-    private inline val repetitionListener
-        get() = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
-                mSetRepetition(position)
-
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-        }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = DataBindingUtil.inflate<DialogAddNoteBinding>(
             layoutInflater,
             R.layout.dialog_add_note,
             null,
             false
-        )
+        ).apply {
+            viewModel = this@AddNoteDialogFragment.viewModel
 
-        binding.viewModel = viewModel
-        binding.typeSpinner.initTypeSpinner()
-        binding.repetitionSpinner.initRepetitionSpinner()
-        binding.descriptionInput.initMarkwonEditor()
+            typeSpinner.initTypeSpinner(
+                context = requireContext(),
+                initialNoteType = requireArguments().getInt(NOTES_TYPE_ARG),
+                setNoteType = this@AddNoteDialogFragment::setNoteType
+            )
+
+            repetitionSpinner.initRepetitionSpinner(
+                context = requireContext(),
+                setRepetition = this@AddNoteDialogFragment::setRepetition,
+                initialRepetitionOrdinal = Repetition.NoRepetition.ordinal
+            )
+
+            descriptionInput.initMarkwonEditor(requireContext())
+        }
 
         return AlertDialog.Builder(requireContext())
             .setCancelable(true)
@@ -100,44 +69,9 @@ class AddNoteDialogFragment : DialogFragment() {
             .create()
     }
 
-    internal fun mSetNoteType(position: Int) =
+    private fun setNoteType(position: Int) =
         viewModel.handler.setNoteType(viewModel, position)
 
-    internal fun mSetRepetition(position: Int) =
+    private fun setRepetition(position: Int) =
         viewModel.handler.setRepetition(viewModel, position)
-
-    private fun Spinner.initTypeSpinner() {
-        adapter = typeSpinnerAdapter
-        onItemSelectedListener = typeSpinnerListener
-        setSelection(requireArguments().getInt(NOTES_TYPE_ARG))
-    }
-
-    private fun Spinner.initRepetitionSpinner() {
-        adapter = repetitionAdapter
-        onItemSelectedListener = repetitionListener
-    }
-
-    private fun EditText.initMarkwonEditor() {
-        val markwon = Markwon
-            .builder(requireContext())
-            .usePlugins(
-                listOf(
-                    StrikethroughPlugin.create(),
-                    JLatexMathPlugin.create(13F),
-                    TablePlugin.create(context),
-                    TaskListPlugin.create(context)
-                )
-            )
-            .build()
-
-        val editor = MarkwonEditor.create(markwon)
-
-        addTextChangedListener(
-            MarkwonEditorTextWatcher.withPreRender(
-                editor,
-                Executors.newCachedThreadPool(),
-                this
-            )
-        )
-    }
 }

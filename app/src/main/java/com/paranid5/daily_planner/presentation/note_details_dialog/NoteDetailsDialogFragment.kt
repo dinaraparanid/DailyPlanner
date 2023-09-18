@@ -11,12 +11,8 @@ import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.databinding.DialogNoteDetailsBinding
 import com.paranid5.daily_planner.di.NoteDetailsViewModelFactory
+import com.paranid5.daily_planner.presentation.utils.ext.DefaultMarkwon
 import dagger.hilt.android.AndroidEntryPoint
-import io.noties.markwon.Markwon
-import io.noties.markwon.ext.latex.JLatexMathPlugin
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
-import io.noties.markwon.ext.tables.TablePlugin
-import io.noties.markwon.ext.tasklist.TaskListPlugin
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,19 +41,7 @@ class NoteDetailsDialogFragment : DialogFragment() {
         )
     }
 
-    private val markwon by lazy {
-        Markwon
-            .builder(requireContext())
-            .usePlugins(
-                listOf(
-                    StrikethroughPlugin.create(),
-                    JLatexMathPlugin.create(13F),
-                    TablePlugin.create(requireContext()),
-                    TaskListPlugin.create(requireContext()),
-                )
-            )
-            .build()
-    }
+    private val markwon by lazy { DefaultMarkwon(requireContext()) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = DataBindingUtil.inflate<DialogNoteDetailsBinding>(
@@ -65,16 +49,20 @@ class NoteDetailsDialogFragment : DialogFragment() {
             R.layout.dialog_note_details,
             null,
             false
-        )
+        ).apply {
+            viewModel = this@NoteDetailsDialogFragment.viewModel
 
-        binding.viewModel = viewModel
-        markwon.setMarkdown(binding.description, viewModel.note.description)
+            markwon.setMarkdown(
+                description,
+                this@NoteDetailsDialogFragment.viewModel.note.description
+            )
+        }
 
         return AlertDialog.Builder(requireContext())
             .setCancelable(true)
             .setView(binding.root)
             .setNeutralButton(R.string.edit) { dialog, _ ->
-                viewModel.handler.launchEditDialog(viewModel.note)
+                viewModel.handler.launchEditDialog(viewModel.note, parentFragmentManager)
                 dialog.dismiss()
             }
             .create()
