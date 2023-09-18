@@ -4,7 +4,7 @@
     <data>
         <variable
                 name="view_model"
-                type="com.paranid5.daily_planner.presentation.edit_note_dialog.EditNoteViewModel" />
+                type="com.paranid5.daily_planner.presentation.dialogs.edit_note_dialog.EditNoteViewModel" />
     </data>
 
     <LinearLayout

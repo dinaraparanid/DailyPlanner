@@ -43,7 +43,7 @@
                 app:carbon_elevationSpotShadowColor="@color/primary_dark"
                 app:carbon_rippleColor="@color/primary_dark"
                 app:carbon_rippleStyle="over"
-                app:carbon_tint="@color/white"
+                app:carbon_tint="@color/synthwave_yellow"
                 app:fabSize="auto"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

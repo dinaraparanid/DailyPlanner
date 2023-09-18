@@ -64,8 +64,10 @@ dependencies {
 
     ksp("androidx.room:room-compiler:2.5.2")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
+
     kapt("com.google.dagger:hilt-compiler:2.48")
 
+    implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.dagger:hilt-android:2.48")
     implementation("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.12")
 

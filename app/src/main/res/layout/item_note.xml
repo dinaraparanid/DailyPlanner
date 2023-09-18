@@ -18,7 +18,7 @@
             app:carbon_rippleColor="@color/primary"
             app:carbon_rippleStyle="over">
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/isDoneChecker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,9 +26,9 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:checked="@{note.isDone}"
-                android:buttonTint="@color/primary"
                 android:enabled="true"
                 android:layout_marginStart="10dp"
+                app:buttonIconTint="@color/synthwave_yellow"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />

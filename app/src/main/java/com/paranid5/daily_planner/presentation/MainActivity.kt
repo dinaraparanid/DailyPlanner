@@ -12,7 +12,7 @@ import com.paranid5.daily_planner.data.note.SimpleNote
 import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.di.DatedNotesState
 import com.paranid5.daily_planner.di.SimpleNotesState
-import com.paranid5.daily_planner.presentation.main_fragment.MainFragment
+import com.paranid5.daily_planner.presentation.fragments.main_fragment.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var datedNotesState: MutableLiveData<List<DatedNote>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Base_Theme_DailyPlanner)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.fragmentFactory = fragmentFactory
