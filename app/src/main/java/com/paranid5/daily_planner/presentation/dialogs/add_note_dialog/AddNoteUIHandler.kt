@@ -1,10 +1,13 @@
 package com.paranid5.daily_planner.presentation.dialogs.add_note_dialog
 
-import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.NoteType
+import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
 import com.paranid5.daily_planner.presentation.UIHandler
+import kotlinx.datetime.LocalDateTime
+import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
@@ -26,13 +29,25 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
                 description = viewModel.descriptionInput,
             )
 
-            NoteType.DATED -> DatedNote(
-                id = Random.nextInt(),
-                title = viewModel.titleInput,
-                description = viewModel.descriptionInput,
-                // TODO: add date
-                // TODO: add repetition
-            )
+            NoteType.DATED -> {
+                val calendar = Calendar
+                    .getInstance()
+                    .apply { time = Date(viewModel.date) }
+
+                DatedNote(
+                    id = Random.nextInt(),
+                    title = viewModel.titleInput,
+                    description = viewModel.descriptionInput,
+                    date = LocalDateTime(
+                        year = calendar.get(Calendar.YEAR),
+                        monthNumber = calendar.get(Calendar.MONTH) + 1,
+                        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
+                        hour = viewModel.time.first,
+                        minute = viewModel.time.second
+                    ),
+                    repetition = viewModel.repetition
+                )
+            }
         }
     )
 }

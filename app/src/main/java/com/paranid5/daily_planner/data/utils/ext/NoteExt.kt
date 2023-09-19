@@ -6,6 +6,23 @@ import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+
+inline val Note.dateOrNull
+    get() = when (this) {
+        is DatedNote -> date
+            .toInstant(TimeZone.currentSystemDefault())
+            .toEpochMilliseconds()
+
+        is SimpleNote -> null
+    }
+
+inline val Note.timeOrNull
+    get() = when (this) {
+        is DatedNote -> date.hour to date.minute
+        is SimpleNote -> null
+    }
 
 inline val Note.repetitionOrNull
     get() = when (this) {

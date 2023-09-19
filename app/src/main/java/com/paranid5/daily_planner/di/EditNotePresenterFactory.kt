@@ -13,6 +13,8 @@ interface EditNotePresenterFactory {
         @Assisted("note") initialNote: Note,
         @Assisted("title") titleInputState: MutableLiveData<String>,
         @Assisted("description") descriptionInputState: MutableLiveData<String>,
+        @Assisted("date") dateState: MutableLiveData<Long?>,
+        @Assisted("time") timeState: MutableLiveData<Pair<Int, Int>?>,
         @Assisted("repetition") repetitionState: MutableLiveData<Repetition>
     ): EditNotePresenter
 }

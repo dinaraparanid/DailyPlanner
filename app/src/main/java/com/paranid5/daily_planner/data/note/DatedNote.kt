@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
+import com.paranid5.daily_planner.data.utils.ext.filledToTimeFormat
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -15,9 +16,6 @@ import com.paranid5.daily_planner.data.room.Entity as BaseEntity
 private inline val currentTime
     get() = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
-
-private inline val String.filledToTimeFormat
-    get() = if (length < 2) "${"0".repeat(2 - length)}$this" else this
 
 data class DatedNote(
     override val id: Int,

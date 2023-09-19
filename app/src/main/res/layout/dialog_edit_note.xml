@@ -78,17 +78,33 @@
                         android:textSize="13sp"
                         android:textStyle="bold"/>
 
-                <com.google.android.material.textfield.TextInputEditText
+                <TextView
                         android:id="@+id/date_picker_launcher"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:minHeight="50dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:hint="@string/date_hint"
+                        android:text="@{view_model.presenter.shownDate}"
                         android:textSize="13sp"
-                        android:maxLines="1"
-                        android:inputType="datetime"
-                        android:visibility="@{view_model.presenter.dateElementsVisibility}"/>
+                        android:textIsSelectable="true" />
+
+                <TextView
+                        android:id="@+id/time_picker_launcher"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:hint="@string/time_hint"
+                        android:text="@{view_model.presenter.shownTime}"
+                        android:textSize="13sp"
+                        android:textIsSelectable="true" />
             </LinearLayout>
 
             <LinearLayout

@@ -3,10 +3,10 @@ package com.paranid5.daily_planner.presentation.dialogs.add_note_dialog
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
-import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.NoteType
+import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
 import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.di.AddNotePresenterFactory
@@ -25,6 +25,8 @@ class AddNoteViewModel @Inject constructor(
         private const val NOTE_TYPE = "note_type"
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
+        private const val DATE = "date"
+        private const val TIME = "time"
         private const val REPETITION = "repetition"
     }
 
@@ -32,6 +34,8 @@ class AddNoteViewModel @Inject constructor(
         noteTypeState = savedStateHandle.getLiveData(NOTE_TYPE, NoteType.SIMPLE),
         titleInputState = savedStateHandle.getLiveData(TITLE, ""),
         descriptionInputState = savedStateHandle.getLiveData(DESCRIPTION, ""),
+        dateState = savedStateHandle.getLiveData(DATE, null),
+        timeState = savedStateHandle.getLiveData(TIME, null),
         repetitionState = savedStateHandle.getLiveData(REPETITION, Repetition.NoRepetition)
     )
 
@@ -92,6 +96,28 @@ class AddNoteViewModel @Inject constructor(
         val input = inp.toString()
         presenter.descriptionInputState.postValue(input)
         savedStateHandle[DESCRIPTION] = input
+    }
+
+    inline val dateState: LiveData<Long?>
+        get() = presenter.dateState
+
+    inline val date
+        get() = dateState.value!!
+
+    fun postDate(date: Long) {
+        presenter.dateState.postValue(date)
+        savedStateHandle[DATE] = date
+    }
+
+    inline val timeState: LiveData<Pair<Int, Int>?>
+        get() = presenter.timeState
+
+    inline val time
+        get() = timeState.value!!
+
+    fun postTime(time: Pair<Int, Int>) {
+        presenter.timeState.postValue(time)
+        savedStateHandle[TIME] = time
     }
 
     inline val repetitionState: LiveData<Repetition>

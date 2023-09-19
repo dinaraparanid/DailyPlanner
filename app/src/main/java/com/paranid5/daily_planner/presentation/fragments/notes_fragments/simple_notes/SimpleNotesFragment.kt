@@ -67,7 +67,7 @@ class SimpleNotesFragment : Fragment(), UIStateChangesObserver {
             container,
             false
         ).apply {
-            addNote.setOnClickListener {
+            addNoteFAB.setOnClickListener {
                 viewModel.handler.onAddNoteButtonClicked(childFragmentManager)
             }
 

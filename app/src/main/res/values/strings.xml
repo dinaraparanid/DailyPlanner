@@ -20,6 +20,13 @@
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
     <string name="edit_note">Edit Note</string>
+    <string name="permission_is_required">Permission is required</string>
+    <string name="alarm_permission_is_required">Alarm permission is required for scheduling of dated notes</string>
+    <string name="cancel">Cancel</string>
+    <string name="date_hint">dd.mm.yyyy</string>
+    <string name="time_hint">hh:mm</string>
+    <string name="select_date">Select date</string>
+    <string name="select_time">Select time</string>
     <string-array name="note_types">
         <item>Simple</item>
         <item>Dated</item>
