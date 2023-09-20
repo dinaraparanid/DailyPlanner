@@ -1,5 +1,8 @@
 package com.paranid5.daily_planner.presentation.dialogs.edit_note_dialog
 
+import android.app.AlarmManager
+import android.content.Context
+import androidx.core.content.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,9 +19,12 @@ import com.paranid5.daily_planner.data.utils.ext.repetitionOrNull
 import com.paranid5.daily_planner.data.utils.ext.timeOrNull
 import com.paranid5.daily_planner.di.EditNotePresenterFactory
 import com.paranid5.daily_planner.di.EditNoteViewModelFactory
+import com.paranid5.daily_planner.domain.utils.ext.cancelNoteAlarm
+import com.paranid5.daily_planner.domain.utils.ext.launchNoteAlarm
 import com.paranid5.daily_planner.presentation.ObservableViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.datetime.LocalDateTime
 import java.util.Calendar
 import java.util.Date
@@ -27,6 +33,7 @@ class EditNoteViewModel @AssistedInject constructor(
     presenterFactory: EditNotePresenterFactory,
     override val handler: EditNoteUIHandler,
     private val notesRepository: NotesRepository,
+    @ApplicationContext context: Context,
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted initialNote: Note
 ) : ObservableViewModel<EditNotePresenter, EditNoteUIHandler>() {
@@ -48,6 +55,10 @@ class EditNoteViewModel @AssistedInject constructor(
                     initialNote = initialNote,
                 ) as T
         }
+    }
+
+    private val alarmManager by lazy {
+        context.getSystemService<AlarmManager>()!!
     }
 
     override val presenter = presenterFactory.create(
@@ -127,28 +138,35 @@ class EditNoteViewModel @AssistedInject constructor(
             it.copy(title = titleInput, description = descriptionInput)
         }
 
-    private suspend inline fun updateDatedNote(note: DatedNote) =
-        notesRepository.update(note) {
-            val calendar = Calendar
-                .getInstance()
-                .apply { time = Date(date) }
+    private suspend inline fun updateDatedNote(
+        context: Context,
+        note: DatedNote
+    ) {
+        alarmManager.cancelNoteAlarm(context, note)
 
-            it.copy(
-                title = titleInput,
-                description = descriptionInput,
-                date = LocalDateTime(
-                    year = calendar.get(Calendar.YEAR),
-                    monthNumber = calendar.get(Calendar.MONTH) + 1,
-                    dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
-                    hour = time.first,
-                    minute = time.second
-                ),
-                repetition = repetition
-            )
-        }
+        val calendar = Calendar
+            .getInstance()
+            .apply { time = Date(date) }
 
-    internal suspend inline fun updateNote() = when (val note = initialNote) {
-        is DatedNote -> updateDatedNote(note)
+        val newNote = note.copy(
+            title = titleInput,
+            description = descriptionInput,
+            date = LocalDateTime(
+                year = calendar.get(Calendar.YEAR),
+                monthNumber = calendar.get(Calendar.MONTH) + 1,
+                dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
+                hour = time.first,
+                minute = time.second
+            ),
+            repetition = repetition
+        )
+
+        alarmManager.launchNoteAlarm(context, note)
+        notesRepository.update(newNote)
+    }
+
+    internal suspend inline fun updateNote(context: Context) = when (val note = initialNote) {
+        is DatedNote -> updateDatedNote(context, note)
         is SimpleNote -> updateSimpleNote(note)
     }
 }

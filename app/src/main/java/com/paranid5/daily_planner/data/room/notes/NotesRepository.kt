@@ -33,6 +33,9 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
     internal suspend inline fun insert(vararg notes: SimpleNote) =
         simpleNotesDao.insert(*notes)
 
+    internal suspend inline fun update(vararg updatedNotes: SimpleNote) =
+        updatedNotes.forEach { simpleNotesDao.update(it) }
+
     internal suspend inline fun update(vararg initials: SimpleNote, upd: (SimpleNote) -> SimpleNote) =
         initials.map(upd).forEach { simpleNotesDao.update(it) }
 
@@ -50,10 +53,11 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
     internal suspend inline fun insert(vararg notes: DatedNote) =
         datedNotesDao.insert(*notes.map(DatedNote::entity).toTypedArray())
 
+    internal suspend inline fun update(vararg updatedNotes: DatedNote) =
+        updatedNotes.map(DatedNote::entity).forEach { datedNotesDao.update(it) }
+
     internal suspend inline fun update(vararg initials: DatedNote, upd: (DatedNote) -> DatedNote) =
-        initials
-            .map { upd(it).entity }
-            .forEach { datedNotesDao.update(it) }
+        initials.map { upd(it).entity }.forEach { datedNotesDao.update(it) }
 
     internal suspend inline fun changeChecked(note: DatedNote, isChecked: Boolean) =
         update(note) { it.copy(isDone = isChecked) }

@@ -70,7 +70,7 @@ class EditNoteDialogFragment : DialogFragment(), UIStateChangesObserver {
             .setView(binding.root)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 viewModel.viewModelScope.launch(Dispatchers.IO) {
-                    viewModel.handler.updateNote(viewModel)
+                    viewModel.handler.updateNote(requireContext(), viewModel)
                 }
 
                 dialog.dismiss()

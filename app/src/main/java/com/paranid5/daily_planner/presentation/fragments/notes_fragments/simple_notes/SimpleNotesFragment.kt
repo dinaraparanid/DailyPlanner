@@ -50,6 +50,7 @@ class SimpleNotesFragment : Fragment(), UIStateChangesObserver {
         @Suppress("UNCHECKED_CAST")
         ItemTouchHelper(
             NotesTouchHandler(
+                requireContext(),
                 simpleNotesState as LiveData<List<Note>>,
                 notesRepository
             )

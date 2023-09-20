@@ -7,7 +7,7 @@ sealed interface Repetition : Parcelable {
     companion object {
         fun fromOrdinal(ordinal: Int) = when (ordinal) {
             0 -> NoRepetition
-            1 -> Days(days = WeekDay.entries.toTypedArray()) // TODO: days selection
+            1 -> Daily // TODO: days selection
             2 -> Weekly
             3 -> Monthly
             4 -> Yearly
@@ -19,7 +19,7 @@ sealed interface Repetition : Parcelable {
     data object NoRepetition : Repetition
 
     @Parcelize
-    data class Days(val days: Array<WeekDay>) : Repetition
+    data object Daily : Repetition
 
     @Parcelize
     data object Weekly : Repetition
@@ -34,7 +34,7 @@ sealed interface Repetition : Parcelable {
 inline val Repetition.ordinal
     get() = when (this) {
         Repetition.NoRepetition -> 0
-        is Repetition.Days -> 1
+        Repetition.Daily -> 1
         Repetition.Monthly -> 2
         Repetition.Weekly -> 3
         Repetition.Yearly -> 4

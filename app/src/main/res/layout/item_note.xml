@@ -15,7 +15,7 @@
             app:carbon_elevationAmbientShadowColor="@color/primary"
             app:carbon_elevationShadowColor="@color/primary"
             app:carbon_elevationSpotShadowColor="@color/primary"
-            app:carbon_rippleColor="@color/primary"
+            app:carbon_rippleColor="@color/synthwave_pink"
             app:carbon_rippleStyle="over">
 
         <com.google.android.material.checkbox.MaterialCheckBox

@@ -1,8 +1,10 @@
 package com.paranid5.daily_planner.presentation.dialogs.add_note_dialog
 
+import android.app.AlarmManager
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -47,6 +49,10 @@ class AddNoteDialogFragment : DialogFragment(), UIStateChangesObserver {
         TimePicker(viewModel::postTime)
     }
 
+    private val alarmManager by lazy {
+        requireContext().getSystemService<AlarmManager>()!!
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = inflateViewBinding().apply { initView() }
         observeUIStateChanges()
@@ -56,7 +62,7 @@ class AddNoteDialogFragment : DialogFragment(), UIStateChangesObserver {
             .setView(binding.root)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 viewModel.viewModelScope.launch(Dispatchers.IO) {
-                    viewModel.handler.addNote(viewModel)
+                    viewModel.handler.addNote(requireActivity(), viewModel, alarmManager)
                 }
 
                 dialog.dismiss()

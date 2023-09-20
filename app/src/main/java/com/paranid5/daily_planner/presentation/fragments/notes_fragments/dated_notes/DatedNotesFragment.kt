@@ -57,6 +57,7 @@ class DatedNotesFragment : Fragment(), UIStateChangesObserver {
         @Suppress("UNCHECKED_CAST")
         ItemTouchHelper(
             NotesTouchHandler(
+                requireContext(),
                 datedNotesState as LiveData<List<Note>>,
                 notesRepository
             )

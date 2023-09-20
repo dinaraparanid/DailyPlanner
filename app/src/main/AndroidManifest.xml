@@ -24,6 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+                android:name=".domain.AlarmReceiver"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="com.paranid5.daily_planner.domain.ALARM_RECEIVED"/>
+            </intent-filter>
+        </receiver>
     </application>
-
 </manifest>

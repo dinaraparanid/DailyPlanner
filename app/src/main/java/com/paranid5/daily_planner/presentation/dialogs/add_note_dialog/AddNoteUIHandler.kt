@@ -1,16 +1,18 @@
 package com.paranid5.daily_planner.presentation.dialogs.add_note_dialog
 
+import android.app.AlarmManager
+import android.content.Context
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
+import com.paranid5.daily_planner.domain.utils.ext.launchNoteAlarm
 import com.paranid5.daily_planner.presentation.UIHandler
 import kotlinx.datetime.LocalDateTime
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.random.Random
 
 @Singleton
 class AddNoteUIHandler @Inject constructor() : UIHandler {
@@ -21,10 +23,14 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
     fun setRepetition(viewModel: AddNoteViewModel, position: Int) =
         viewModel.postRepetition(Repetition.fromOrdinal(position))
 
-    internal suspend inline fun addNote(viewModel: AddNoteViewModel) = viewModel.addNote(
+    internal suspend inline fun addNote(
+        context: Context,
+        viewModel: AddNoteViewModel,
+        alarmManager: AlarmManager
+    ) = viewModel.addNote(
         when (viewModel.noteType) {
             NoteType.SIMPLE -> SimpleNote(
-                id = Random.nextInt(),
+                id = 0,
                 title = viewModel.titleInput,
                 description = viewModel.descriptionInput,
             )
@@ -34,8 +40,8 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
                     .getInstance()
                     .apply { time = Date(viewModel.date) }
 
-                DatedNote(
-                    id = Random.nextInt(),
+                val note = DatedNote(
+                    id = 0,
                     title = viewModel.titleInput,
                     description = viewModel.descriptionInput,
                     date = LocalDateTime(
@@ -47,6 +53,9 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
                     ),
                     repetition = viewModel.repetition
                 )
+
+                alarmManager.launchNoteAlarm(context, note)
+                note
             }
         }
     )
