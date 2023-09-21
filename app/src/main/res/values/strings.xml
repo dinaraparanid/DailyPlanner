@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DailyPlanner</string>
+    <string name="app_name">Daily Planner</string>
     <string name="add_note">Add note</string>
     <string name="note_title">Note title</string>
     <string name="note_description">Note description</string>
@@ -27,6 +27,8 @@
     <string name="time_hint">hh:mm</string>
     <string name="select_date">Select date</string>
     <string name="select_time">Select time</string>
+    <string name="incorrect_time">Note’s time must be later than current time</string>
+    <string name="time_s_app">Time’s app!</string>
     <string-array name="note_types">
         <item>Simple</item>
         <item>Dated</item>

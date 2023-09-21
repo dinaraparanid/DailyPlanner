@@ -2,6 +2,7 @@ package com.paranid5.daily_planner.presentation.dialogs.edit_note_dialog
 
 import android.app.AlarmManager
 import android.content.Context
+import android.widget.Toast
 import androidx.core.content.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.Repetition
@@ -25,7 +27,10 @@ import com.paranid5.daily_planner.presentation.ObservableViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import java.util.Calendar
 import java.util.Date
 
@@ -59,6 +64,10 @@ class EditNoteViewModel @AssistedInject constructor(
 
     private val alarmManager by lazy {
         context.getSystemService<AlarmManager>()!!
+    }
+
+    private val calendar by lazy {
+        Calendar.getInstance()
     }
 
     override val presenter = presenterFactory.create(
@@ -143,21 +152,25 @@ class EditNoteViewModel @AssistedInject constructor(
         note: DatedNote
     ) {
         alarmManager.cancelNoteAlarm(context, note)
+        calendar.time = Date(date)
 
-        val calendar = Calendar
-            .getInstance()
-            .apply { time = Date(date) }
+        val date = LocalDateTime(
+            year = calendar.get(Calendar.YEAR),
+            monthNumber = calendar.get(Calendar.MONTH) + 1,
+            dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
+            hour = time.first,
+            minute = time.second
+        )
+
+        if (date.toInstant(TimeZone.currentSystemDefault()) <= Clock.System.now()) {
+            Toast.makeText(context, R.string.incorrect_time, Toast.LENGTH_LONG).show()
+            return
+        }
 
         val newNote = note.copy(
             title = titleInput,
             description = descriptionInput,
-            date = LocalDateTime(
-                year = calendar.get(Calendar.YEAR),
-                monthNumber = calendar.get(Calendar.MONTH) + 1,
-                dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
-                hour = time.first,
-                minute = time.second
-            ),
+            date = date,
             repetition = repetition
         )
 
