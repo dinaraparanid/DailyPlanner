@@ -51,15 +51,9 @@ class AddNoteViewModel @Inject constructor(
     inline val datedNotes
         get() = datedNotesState.value!!
 
-    private suspend inline fun addSimpleNotes(notes: List<SimpleNote>) =
-        notesRepository.insert(*notes.toTypedArray())
-
-    private suspend inline fun addDatedNotes(notes: List<DatedNote>) =
-        notesRepository.insert(*notes.toTypedArray())
-
     internal suspend inline fun addNote(note: Note) = when (note) {
-        is SimpleNote -> addSimpleNotes(simpleNotes + note)
-        is DatedNote -> addDatedNotes(datedNotes + note)
+        is SimpleNote -> notesRepository.insert(note)
+        is DatedNote -> notesRepository.insert(note)
     }
 
     inline val noteTypeState: LiveData<NoteType>

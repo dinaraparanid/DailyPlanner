@@ -161,7 +161,7 @@ class EditNoteViewModel @AssistedInject constructor(
             repetition = repetition
         )
 
-        alarmManager.launchNoteAlarm(context, note)
+        alarmManager.launchNoteAlarm(context, newNote)
         notesRepository.update(newNote)
     }
 

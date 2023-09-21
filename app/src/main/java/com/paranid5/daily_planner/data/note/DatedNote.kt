@@ -18,7 +18,7 @@ private inline val currentTime
         .toLocalDateTime(TimeZone.currentSystemDefault())
 
 data class DatedNote(
-    override val id: Int,
+    override val id: Long = 0,
     override val title: String,
     override val description: String,
     @ColumnInfo("is_done") override val isDone: Boolean = false,
@@ -32,7 +32,7 @@ data class DatedNote(
 
     @RoomEntity(tableName = "DatedNote")
     data class Entity(
-        @PrimaryKey(autoGenerate = true) val id: Int,
+        @PrimaryKey(autoGenerate = true) val id: Long,
         val title: String,
         val description: String,
         @ColumnInfo("is_done") val isDone: Boolean,
@@ -96,7 +96,7 @@ data class DatedNote(
     )
 
     constructor(parcel: Parcel) : this(
-        id = parcel.readInt(),
+        id = parcel.readLong(),
         title = parcel.readString() ?: "",
         description = parcel.readString() ?: "",
         date = parcel.readInt().takeIf { it != -1 }?.let {
@@ -127,10 +127,10 @@ data class DatedNote(
         get() = "${date.dayOfMonth.toString().filledToTimeFormat}.${date.monthNumber.toString().filledToTimeFormat}"
 
     private inline val timeMessage
-        get() = "${date.hour}:${date.minute}"
+        get() = "${date.hour.toString().filledToTimeFormat}:${date.minute.toString().filledToTimeFormat}"
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
+        parcel.writeLong(id)
         parcel.writeString(title)
         parcel.writeString(description)
 

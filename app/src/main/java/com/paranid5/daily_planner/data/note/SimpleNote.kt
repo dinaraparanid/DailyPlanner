@@ -9,7 +9,7 @@ import androidx.room.Entity as RoomEntity
 @Parcelize
 @RoomEntity
 data class SimpleNote(
-    @PrimaryKey(autoGenerate = true) override val id: Int,
+    @PrimaryKey(autoGenerate = true) override val id: Long,
     override val title: String,
     override val description: String,
     @ColumnInfo("is_done") override val isDone: Boolean = false

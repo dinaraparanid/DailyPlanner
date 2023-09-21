@@ -30,14 +30,14 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
 
     fun getSimpleNoteById(id: Int) = simpleNotesDao.getById(id)
 
-    internal suspend inline fun insert(vararg notes: SimpleNote) =
-        simpleNotesDao.insert(*notes)
+    internal suspend inline fun insert(note: SimpleNote) =
+        simpleNotesDao.insert(note)
 
-    internal suspend inline fun update(vararg updatedNotes: SimpleNote) =
-        updatedNotes.forEach { simpleNotesDao.update(it) }
+    internal suspend inline fun update(updatedNote: SimpleNote) =
+        simpleNotesDao.update(updatedNote)
 
-    internal suspend inline fun update(vararg initials: SimpleNote, upd: (SimpleNote) -> SimpleNote) =
-        initials.map(upd).forEach { simpleNotesDao.update(it) }
+    internal suspend inline fun update(initial: SimpleNote, upd: (SimpleNote) -> SimpleNote) =
+        simpleNotesDao.update(upd(initial))
 
     internal suspend inline fun changeChecked(note: SimpleNote, isChecked: Boolean) =
         update(note) { it.copy(isDone = isChecked) }
@@ -50,14 +50,14 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
 
     fun getDatedNoteById(id: Int) = datedNotesDao.getById(id)
 
-    internal suspend inline fun insert(vararg notes: DatedNote) =
-        datedNotesDao.insert(*notes.map(DatedNote::entity).toTypedArray())
+    internal suspend inline fun insert(note: DatedNote) =
+        datedNotesDao.insert(note.entity)
 
-    internal suspend inline fun update(vararg updatedNotes: DatedNote) =
-        updatedNotes.map(DatedNote::entity).forEach { datedNotesDao.update(it) }
+    internal suspend inline fun update(updatedNote: DatedNote) =
+        datedNotesDao.update(updatedNote.entity)
 
-    internal suspend inline fun update(vararg initials: DatedNote, upd: (DatedNote) -> DatedNote) =
-        initials.map { upd(it).entity }.forEach { datedNotesDao.update(it) }
+    internal suspend inline fun update(initial: DatedNote, upd: (DatedNote) -> DatedNote) =
+        datedNotesDao.update(upd(initial).entity)
 
     internal suspend inline fun changeChecked(note: DatedNote, isChecked: Boolean) =
         update(note) { it.copy(isDone = isChecked) }

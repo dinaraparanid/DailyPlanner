@@ -23,9 +23,10 @@ fun AlarmManager.launchNoteAlarm(
                 context.applicationContext,
                 note.hashCode(),
                 Intent(context, AlarmReceiver::class.java).apply {
+                    action = AlarmReceiver.Broadcast_ALARM_RECEIVED
                     putExtra(AlarmReceiver.NOTE_ARG, note)
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
             )
         )
 
@@ -36,9 +37,10 @@ fun AlarmManager.launchNoteAlarm(
             context.applicationContext,
             note.hashCode(),
             Intent(context, AlarmReceiver::class.java).apply {
+                action = AlarmReceiver.Broadcast_ALARM_RECEIVED
                 putExtra(AlarmReceiver.NOTE_ARG, note)
             },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
     )
 }
@@ -46,11 +48,11 @@ fun AlarmManager.launchNoteAlarm(
 fun AlarmManager.cancelNoteAlarm(
     context: Context,
     note: DatedNote,
-) = cancel(
-    PendingIntent.getBroadcast(
-        context.applicationContext,
-        note.hashCode(),
-        Intent(context, AlarmReceiver::class.java),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-    )
-)
+) = PendingIntent.getBroadcast(
+    context.applicationContext,
+    note.hashCode(),
+    Intent(context, AlarmReceiver::class.java).apply {
+        action = AlarmReceiver.Broadcast_ALARM_RECEIVED
+    },
+    PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+)?.let(this::cancel)

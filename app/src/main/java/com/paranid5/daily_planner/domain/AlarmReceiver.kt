@@ -23,6 +23,7 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
     lateinit var notesRepository: NotesRepository
 
     companion object {
+        const val Broadcast_ALARM_RECEIVED = "com.paranid5.daily_planner.domain.ALARM_RECEIVED"
         const val NOTE_ARG = "note"
     }
 
@@ -32,7 +33,6 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
         val note = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
                 intent.getParcelableExtra(NOTE_ARG, DatedNote::class.java)
-
             else -> intent.getParcelableExtra(NOTE_ARG)
         } ?: return
 
@@ -40,9 +40,8 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
         Toast.makeText(context, note.title, Toast.LENGTH_LONG).show()
 
         note.nextAlarmTime?.let { newTime ->
-            println(newTime)
             val newNote = note.copy(date = newTime)
-            launch { notesRepository.update(newNote) }
+            launch(Dispatchers.IO) { notesRepository.update(newNote) }
             alarmManager.launchNoteAlarm(context, newNote)
         }
     }

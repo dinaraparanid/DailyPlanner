@@ -10,7 +10,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import java.util.Calendar
-import kotlin.time.Duration.Companion.days
 
 inline val Note.dateOrNull
     get() = when (this) {

@@ -27,12 +27,13 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
         context: Context,
         viewModel: AddNoteViewModel,
         alarmManager: AlarmManager
-    ) = viewModel.addNote(
+    ) {
         when (viewModel.noteType) {
-            NoteType.SIMPLE -> SimpleNote(
-                id = 0,
-                title = viewModel.titleInput,
-                description = viewModel.descriptionInput,
+            NoteType.SIMPLE -> viewModel.addNote(
+                SimpleNote(
+                    title = viewModel.titleInput,
+                    description = viewModel.descriptionInput,
+                )
             )
 
             NoteType.DATED -> {
@@ -41,7 +42,6 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
                     .apply { time = Date(viewModel.date) }
 
                 val note = DatedNote(
-                    id = 0,
                     title = viewModel.titleInput,
                     description = viewModel.descriptionInput,
                     date = LocalDateTime(
@@ -54,9 +54,8 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
                     repetition = viewModel.repetition
                 )
 
-                alarmManager.launchNoteAlarm(context, note)
-                note
+                alarmManager.launchNoteAlarm(context, note.copy(id = viewModel.addNote(note)))
             }
         }
-    )
+    }
 }
