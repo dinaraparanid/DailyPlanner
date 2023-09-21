@@ -49,7 +49,6 @@ inline val Note.repetitionStrRes
 inline val DatedNote.nextAlarmTime: LocalDateTime?
     get() {
         val calendar = Calendar.getInstance().apply {
-            timeInMillis = 0
             time = date.toDate()
         }
 

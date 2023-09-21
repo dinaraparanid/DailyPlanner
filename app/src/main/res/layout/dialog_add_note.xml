@@ -114,7 +114,9 @@
                         android:hint="@string/date_hint"
                         android:text="@{view_model.presenter.shownDate}"
                         android:textSize="13sp"
-                        android:textIsSelectable="true" />
+                        android:textIsSelectable="true"
+                        android:clickable="true"
+                        android:focusable="true" />
 
                 <TextView
                         android:id="@+id/time_picker_launcher"
@@ -128,7 +130,9 @@
                         android:hint="@string/time_hint"
                         android:text="@{view_model.presenter.shownTime}"
                         android:textSize="13sp"
-                        android:textIsSelectable="true" />
+                        android:textIsSelectable="true"
+                        android:clickable="true"
+                        android:focusable="true" />
             </LinearLayout>
 
             <LinearLayout

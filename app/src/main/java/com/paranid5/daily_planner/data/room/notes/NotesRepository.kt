@@ -25,10 +25,10 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
     private val simpleNotesDao = db.simpleNotesDao()
     private val datedNotesDao = db.datedNotesDao()
 
-    val simpleNotes
+    internal inline val simpleNotes
         get() = simpleNotesDao.getAll()
 
-    fun getSimpleNoteById(id: Int) = simpleNotesDao.getById(id)
+    fun getSimpleNoteById(id: Long) = simpleNotesDao.getById(id)
 
     internal suspend inline fun insert(note: SimpleNote) =
         simpleNotesDao.insert(note)
@@ -45,10 +45,16 @@ class NotesRepository @Inject constructor(@ApplicationContext context: Context) 
     internal suspend inline fun delete(note: SimpleNote) =
         simpleNotesDao.delete(note)
 
-    val datedNotes
-        get() = datedNotesDao.getAll().map { it.map(::DatedNote) }
+    internal inline val datedNotes
+        get() = datedNotesDao.getAllWithFlow().map { it.map(::DatedNote) }
 
-    fun getDatedNoteById(id: Int) = datedNotesDao.getById(id)
+    internal suspend inline fun getDatedNotes() =
+        datedNotesDao.getAll()
+
+    internal suspend inline fun getDatedNoteById(id: Long) =
+        datedNotesDao.getById(id)
+
+    fun getDatedNoteByIdWithFlow(id: Long) = datedNotesDao.getByIdWithFlow(id)
 
     internal suspend inline fun insert(note: DatedNote) =
         datedNotesDao.insert(note.entity)

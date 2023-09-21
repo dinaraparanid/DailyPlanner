@@ -29,6 +29,7 @@
     <string name="select_time">Select time</string>
     <string name="incorrect_time">Note’s time must be later than current time</string>
     <string name="time_s_app">Time’s app!</string>
+    <string name="notifications_required">Notifications are required for dated notes</string>
     <string-array name="note_types">
         <item>Simple</item>
         <item>Dated</item>

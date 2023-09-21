@@ -1,5 +1,6 @@
 package com.paranid5.daily_planner.presentation.fragments.notes_fragments.dated_notes
 
+import android.Manifest
 import android.app.AlarmManager
 import android.content.Intent
 import android.os.Build
@@ -8,6 +9,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
@@ -29,11 +31,16 @@ import com.paranid5.daily_planner.presentation.dialogs.note_details_dialog.NoteD
 import com.paranid5.daily_planner.presentation.fragments.notes_fragments.NotesAdapter
 import com.paranid5.daily_planner.presentation.fragments.notes_fragments.NotesTouchHandler
 import com.paranid5.daily_planner.presentation.utils.decorations.VerticalSpaceItemDecoration
+import com.vmadalin.easypermissions.EasyPermissions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DatedNotesFragment : Fragment(), UIStateChangesObserver {
+class DatedNotesFragment : Fragment(), UIStateChangesObserver, EasyPermissions.PermissionCallbacks {
+    private companion object {
+        private const val NOTIFICATIONS_PERMISSION_REQUEST_CODE = 20
+    }
+
     @Inject
     lateinit var notesRepository: NotesRepository
 
@@ -73,32 +80,7 @@ class DatedNotesFragment : Fragment(), UIStateChangesObserver {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentNotesBinding?>(
-            inflater,
-            R.layout.fragment_notes,
-            container,
-            false
-        ).apply {
-            addNoteFAB.setOnClickListener {
-                fun addNote() =
-                    viewModel.handler.onAddNoteButtonClicked(childFragmentManager)
-
-                when {
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
-                        if (checkAndRequestAlarmPermission()) addNote()
-
-                    else -> addNote()
-                }
-            }
-
-            notesList.also {
-                it.layoutManager = LinearLayoutManager(context)
-                it.adapter = adapter
-                it.addItemDecoration(VerticalSpaceItemDecoration(30))
-                touchHelper.attachToRecyclerView(it)
-            }
-        }
-
+        binding = inflateViewBinding(inflater, container).apply { initView() }
         observeUIStateChanges()
         return binding.root
     }
@@ -112,6 +94,75 @@ class DatedNotesFragment : Fragment(), UIStateChangesObserver {
 
     override fun observeUIStateChanges() =
         viewModel.notesState.observe(viewLifecycleOwner, adapter::submitList)
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) = Unit
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) = Unit
+
+    private fun inflateViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        DataBindingUtil.inflate<FragmentNotesBinding?>(
+            inflater,
+            R.layout.fragment_notes,
+            container,
+            false
+        )
+
+    private fun FragmentNotesBinding.initView() {
+        addNoteFAB.setOnClickListener { onFABClicked() }
+
+        notesList.also {
+            it.layoutManager = LinearLayoutManager(context)
+            it.adapter = adapter
+            it.addItemDecoration(VerticalSpaceItemDecoration(30))
+            touchHelper.attachToRecyclerView(it)
+        }
+    }
+
+    private fun onFABClicked() {
+        fun addNote() =
+            viewModel.handler.onAddNoteButtonClicked(childFragmentManager)
+
+        if (!checkAndRequestNotificationsPermission())
+            return
+
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
+                if (checkAndRequestAlarmPermission()) addNote()
+            else -> addNote()
+        }
+    }
+
+    private fun checkAndRequestNotificationsPermission(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val isPostNotificationsGranted = EasyPermissions.hasPermissions(
+                requireContext(), Manifest.permission.POST_NOTIFICATIONS
+            )
+
+            if (!isPostNotificationsGranted) {
+                val isPostNotificationsDeclined = EasyPermissions.somePermissionPermanentlyDenied(
+                    this, listOf(Manifest.permission.POST_NOTIFICATIONS)
+                )
+
+                if (isPostNotificationsDeclined)
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.notifications_required,
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                EasyPermissions.requestPermissions(
+                    host = this@DatedNotesFragment,
+                    rationale = resources.getString(R.string.notifications_required),
+                    requestCode = NOTIFICATIONS_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+
+                return false
+            }
+        }
+
+        return true
+    }
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkAndRequestAlarmPermission(): Boolean {

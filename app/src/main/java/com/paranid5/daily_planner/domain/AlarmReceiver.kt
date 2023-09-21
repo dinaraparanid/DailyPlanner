@@ -20,6 +20,7 @@ import com.paranid5.daily_planner.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,13 +55,19 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             createNotificationChannel()
 
-        showNotification(context, note)
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ->
+                if (notificationManager.areNotificationsEnabled())
+                    launch { showNotificationAsync(context, note) }
+
+            else -> launch { showNotificationAsync(context, note) }
+        }
 
         note.nextAlarmTime?.let { newTime ->
             val newNote = note.copy(date = newTime, isDone = false)
-            launch(Dispatchers.IO) { notesRepository.update(newNote) }
+            launch { notesRepository.update(newNote) }
             alarmManager.launchNoteAlarm(context, newNote)
-        }
+        } ?: launch { notesRepository.update(note.copy(isDone = true)) }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -82,7 +89,7 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
         isNotificationChannelCreated = true
     }
 
-    private fun NotificationBuilder(context: Context, note: DatedNote) =
+    private fun NotificationBuilder(context: Context, note: DatedNote.Entity) =
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ->
                 Notification.Builder(context.applicationContext, ALARM_CHANNEL_ID)
@@ -103,6 +110,18 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
                 )
             )
 
-    private fun showNotification(context: Context, note: DatedNote) =
-        notificationManager.notify(NOTIFICATION_ID, NotificationBuilder(context, note).build())
+    private suspend inline fun showNotificationAsync(context: Context, note: DatedNote) =
+        coroutineScope {
+            notesRepository
+                .getDatedNoteById(note.id)
+                ?.takeIf { !it.isDone }
+                ?.let {
+                    launch(Dispatchers.Main) {
+                        notificationManager.notify(
+                            NOTIFICATION_ID,
+                            NotificationBuilder(context, it).build()
+                        )
+                    }
+                }
+        }
 }

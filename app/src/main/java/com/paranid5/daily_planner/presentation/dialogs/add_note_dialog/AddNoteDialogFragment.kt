@@ -104,11 +104,13 @@ class AddNoteDialogFragment : DialogFragment(), UIStateChangesObserver {
         )
 
         datePickerLauncher.setOnClickListener {
-            datePicker.show(parentFragmentManager, DATE_PICKER_TAG)
+            if (!datePicker.isAdded)
+                datePicker.show(parentFragmentManager, DATE_PICKER_TAG)
         }
 
         timePickerLauncher.setOnClickListener {
-            timePicker.show(parentFragmentManager, TIME_PICKER_TAG)
+            if (!timePicker.isAdded)
+                timePicker.show(parentFragmentManager, TIME_PICKER_TAG)
         }
 
         descriptionInput.initMarkwonEditor(requireContext())

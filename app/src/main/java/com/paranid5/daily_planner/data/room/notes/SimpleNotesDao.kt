@@ -12,5 +12,5 @@ interface SimpleNotesDao : BaseDao<SimpleNote> {
     fun getAll(): Flow<List<SimpleNote>>
 
     @Query("SELECT * FROM SimpleNote WHERE id = (:id)")
-    fun getById(id: Int): Flow<SimpleNote?>
+    fun getById(id: Long): Flow<SimpleNote?>
 }

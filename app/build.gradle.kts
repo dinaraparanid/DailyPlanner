@@ -69,10 +69,12 @@ dependencies {
 
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.dagger:hilt-android:2.48")
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.12")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.10-1.0.13")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+
+    implementation("com.vmadalin:easypermissions-ktx:1.0.0")
 
     arrayOf(
         "io.noties.markwon:core:4.6.2",

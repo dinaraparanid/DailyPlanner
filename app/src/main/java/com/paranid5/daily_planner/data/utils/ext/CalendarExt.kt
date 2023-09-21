@@ -7,6 +7,6 @@ fun Calendar.toLocalDateTime() = LocalDateTime(
     get(Calendar.YEAR),
     get(Calendar.MONTH),
     get(Calendar.DAY_OF_MONTH),
-    get(Calendar.HOUR),
+    get(Calendar.HOUR_OF_DAY),
     get(Calendar.MINUTE)
 )

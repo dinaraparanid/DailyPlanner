@@ -9,8 +9,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DatedNotesDao : BaseDao<DatedNote.Entity> {
     @Query("SELECT * FROM DatedNote")
-    fun getAll(): Flow<List<DatedNote.Entity>>
+    fun getAllWithFlow(): Flow<List<DatedNote.Entity>>
+
+    @Query("SELECT * FROM DatedNote")
+    suspend fun getAll(): List<DatedNote.Entity>
 
     @Query("SELECT * FROM DatedNote WHERE id = (:id)")
-    fun getById(id: Int): Flow<DatedNote.Entity?>
+    fun getByIdWithFlow(id: Long): Flow<DatedNote.Entity?>
+
+    @Query("SELECT * FROM DatedNote WHERE id = (:id)")
+    suspend fun getById(id: Long): DatedNote.Entity?
 }

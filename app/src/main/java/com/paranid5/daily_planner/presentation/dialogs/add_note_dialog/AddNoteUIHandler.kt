@@ -10,6 +10,9 @@ import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
 import com.paranid5.daily_planner.domain.utils.ext.launchNoteAlarm
 import com.paranid5.daily_planner.presentation.UIHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -36,7 +39,7 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
         context: Context,
         viewModel: AddNoteViewModel,
         alarmManager: AlarmManager
-    ) {
+    ) = coroutineScope {
         when (viewModel.noteType) {
             NoteType.SIMPLE -> viewModel.addNote(
                 SimpleNote(
@@ -57,8 +60,15 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
                 )
 
                 if (date.toInstant(TimeZone.currentSystemDefault()) <= Clock.System.now()) {
-                    Toast.makeText(context, R.string.incorrect_time, Toast.LENGTH_LONG).show()
-                    return
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(
+                            context,
+                            R.string.incorrect_time,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    return@coroutineScope
                 }
 
                 val note = DatedNote(
