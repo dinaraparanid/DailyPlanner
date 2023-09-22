@@ -1,4 +1,4 @@
-package com.paranid5.daily_planner.data.utils.ext
+package com.paranid5.daily_planner.domain.utils.ext
 
 import kotlinx.datetime.LocalDateTime
 import java.util.Calendar

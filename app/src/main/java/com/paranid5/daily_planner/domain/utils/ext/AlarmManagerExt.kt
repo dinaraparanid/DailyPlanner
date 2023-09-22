@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.paranid5.daily_planner.data.note.DatedNote
-import com.paranid5.daily_planner.data.utils.ext.epochMillis
 import com.paranid5.daily_planner.domain.AlarmReceiver
 
 @SuppressLint("ScheduleExactAlarm")

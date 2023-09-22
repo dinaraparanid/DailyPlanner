@@ -1,11 +1,13 @@
 package com.paranid5.daily_planner.data.utils.ext
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.paranid5.daily_planner.R
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
+import com.paranid5.daily_planner.domain.utils.ext.toDate
+import com.paranid5.daily_planner.domain.utils.ext.toLocalDateTime
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant

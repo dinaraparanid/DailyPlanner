@@ -62,26 +62,30 @@ class SimpleNotesFragment : Fragment(), UIStateChangesObserver {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentNotesBinding?>(
+        binding = inflateViewBinding(inflater, container).apply { initView() }
+        observeUIStateChanges()
+        return binding.root
+    }
+
+    private fun inflateViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        DataBindingUtil.inflate<FragmentNotesBinding?>(
             inflater,
             R.layout.fragment_notes,
             container,
             false
-        ).apply {
-            addNoteFAB.setOnClickListener {
-                viewModel.handler.onAddNoteButtonClicked(childFragmentManager)
-            }
+        )
 
-            notesList.also {
-                it.layoutManager = LinearLayoutManager(context)
-                it.adapter = adapter
-                it.addItemDecoration(VerticalSpaceItemDecoration(30))
-                touchHelper.attachToRecyclerView(it)
-            }
+    private fun FragmentNotesBinding.initView() {
+        addNoteFAB.setOnClickListener {
+            viewModel.handler.onAddNoteButtonClicked(childFragmentManager)
         }
 
-        observeUIStateChanges()
-        return binding.root
+        notesList.also {
+            it.layoutManager = LinearLayoutManager(context)
+            it.adapter = adapter
+            it.addItemDecoration(VerticalSpaceItemDecoration(30))
+            touchHelper.attachToRecyclerView(it)
+        }
     }
 
     override fun observeUIStateChanges() =

@@ -27,6 +27,9 @@ import com.paranid5.daily_planner.presentation.ObservableViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -150,21 +153,28 @@ class EditNoteViewModel @AssistedInject constructor(
     private suspend inline fun updateDatedNote(
         context: Context,
         note: DatedNote
-    ) {
+    ) = coroutineScope {
         alarmManager.cancelNoteAlarm(context, note)
-        calendar.time = Date(date)
+        calendar.time = dateState.value?.let { Date(it) } ?: Date()
 
         val date = LocalDateTime(
             year = calendar.get(Calendar.YEAR),
             monthNumber = calendar.get(Calendar.MONTH) + 1,
             dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
-            hour = time.first,
-            minute = time.second
+            hour = timeState.value?.first ?: 0,
+            minute = timeState.value?.second ?: 0
         )
 
         if (date.toInstant(TimeZone.currentSystemDefault()) <= Clock.System.now()) {
-            Toast.makeText(context, R.string.incorrect_time, Toast.LENGTH_LONG).show()
-            return
+            launch(Dispatchers.Main) {
+                Toast.makeText(
+                    context,
+                    R.string.incorrect_time,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            return@coroutineScope
         }
 
         val newNote = note.copy(

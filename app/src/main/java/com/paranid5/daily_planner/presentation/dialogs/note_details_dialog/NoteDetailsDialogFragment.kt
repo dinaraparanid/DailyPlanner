@@ -44,19 +44,7 @@ class NoteDetailsDialogFragment : DialogFragment() {
     private val markwon by lazy { DefaultMarkwon(requireContext()) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val binding = DataBindingUtil.inflate<DialogNoteDetailsBinding>(
-            layoutInflater,
-            R.layout.dialog_note_details,
-            null,
-            false
-        ).apply {
-            viewModel = this@NoteDetailsDialogFragment.viewModel
-
-            markwon.setMarkdown(
-                description,
-                this@NoteDetailsDialogFragment.viewModel.note.description
-            )
-        }
+        val binding = inflateViewBinding().apply { initView() }
 
         return MaterialAlertDialogBuilder(requireActivity())
             .setCancelable(true)
@@ -66,5 +54,22 @@ class NoteDetailsDialogFragment : DialogFragment() {
                 dialog.dismiss()
             }
             .create()
+    }
+
+    private fun inflateViewBinding() =
+        DataBindingUtil.inflate<DialogNoteDetailsBinding>(
+            layoutInflater,
+            R.layout.dialog_note_details,
+            null,
+            false
+        )
+
+    private fun DialogNoteDetailsBinding.initView() {
+        viewModel = this@NoteDetailsDialogFragment.viewModel
+
+        markwon.setMarkdown(
+            description,
+            this@NoteDetailsDialogFragment.viewModel.note.description
+        )
     }
 }

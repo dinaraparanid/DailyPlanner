@@ -60,6 +60,8 @@
                         android:layout_gravity="center_vertical"
                         android:text="@{view_model.dateMessage}"
                         android:textSize="13sp"
+                        android:focusable="true"
+                        android:clickable="true"
                         android:textIsSelectable="true" />
             </LinearLayout>
 
@@ -98,25 +100,16 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal">
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:text="@string/description"
-                        android:textSize="13sp"
-                        android:textStyle="bold"/>
-
-                <TextView
                         android:id="@+id/description"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:textSize="13sp"
-                        android:textIsSelectable="true" />
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:clickable="true"
+                        android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

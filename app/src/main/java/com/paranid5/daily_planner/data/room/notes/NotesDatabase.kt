@@ -5,7 +5,11 @@ import androidx.room.RoomDatabase
 import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.SimpleNote
 
-@Database(entities = [SimpleNote::class, DatedNote.Entity::class], version = 1)
+@Database(
+    entities = [SimpleNote::class, DatedNote.Entity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class NotesDatabase : RoomDatabase() {
     abstract fun simpleNotesDao(): SimpleNotesDao
     abstract fun datedNotesDao(): DatedNotesDao

@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
@@ -17,6 +18,7 @@ import com.paranid5.daily_planner.data.room.notes.NotesRepository
 import com.paranid5.daily_planner.data.utils.ext.nextAlarmTime
 import com.paranid5.daily_planner.domain.utils.ext.launchNoteAlarm
 import com.paranid5.daily_planner.presentation.MainActivity
+import com.paranid5.daily_planner.presentation.utils.ext.DefaultMarkwon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -101,6 +103,11 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
             .setOngoing(false)
             .setShowWhen(true)
             .setOnlyAlertOnce(true)
+            .setStyle(
+                Notification.BigTextStyle().bigText(
+                    DefaultMarkwon(context).toMarkdown(note.description)
+                )
+            )
             .setContentIntent(
                 PendingIntent.getActivity(
                     context.applicationContext,

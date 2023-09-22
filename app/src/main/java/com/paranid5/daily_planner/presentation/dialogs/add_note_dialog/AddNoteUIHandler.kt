@@ -49,14 +49,14 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
             )
 
             NoteType.DATED -> {
-                calendar.time = Date(viewModel.date)
+                calendar.time = viewModel.dateState.value?.let { Date(it) } ?: Date()
 
                 val date = LocalDateTime(
                     year = calendar.get(Calendar.YEAR),
                     monthNumber = calendar.get(Calendar.MONTH) + 1,
                     dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
-                    hour = viewModel.time.first,
-                    minute = viewModel.time.second
+                    hour = viewModel.timeState.value?.first ?: 0,
+                    minute = viewModel.timeState.value?.second ?: 0
                 )
 
                 if (date.toInstant(TimeZone.currentSystemDefault()) <= Clock.System.now()) {
