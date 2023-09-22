@@ -61,6 +61,7 @@ Application supports both *simple* and *dated notes* + *regularity*
     <li>AndroidX.ViewPager</li>
     <li>AndroidX.Fragment</li>
     <li>AndroidX.ConstraintLayout</li>
+    <li>AndroidX.RecyclerView + AsyncListDiffer</li>
 </ul>
 
 ## **Current Status:**
