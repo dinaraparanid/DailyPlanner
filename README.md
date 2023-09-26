@@ -50,9 +50,10 @@ Application supports both *simple* and *dated notes* + *regularity*
     <li>Coroutines + Flow</li>
     <li>Dagger Hilt + Assisted Inject</li>
     <li>Room + Coroutines and Flow extensions</li>
-    <li>KotlinX.Serialization</li>
+    <li>Retrofit</li>
+    <li>Jackson</li>
     <li>KotlinX.DateTime</li>
-    <li>Calendar + Date + LocalDateTime</li>
+    <li>Calendar + Java Date/Time API</li>
     <li>Easy Permissions</li>
     <li>Carbon</li>
     <li>Material 3</li>
@@ -66,7 +67,7 @@ Application supports both *simple* and *dated notes* + *regularity*
 
 ## **Current Status:**
 
-**Alpha V 0.1.0.0**
+**Alpha V 0.1.0.1**
 
 ### **Implemented features:**
 1. Simple and Dated notes

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="release"
+                type="com.paranid5.daily_planner.data.Release" />
+    </data>
+
+    <carbon.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <carbon.widget.TextView
+                android:id="@+id/new_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:scrollbarThumbHorizontal="@null"
+                android:scrollbarThumbVertical="@null"
+                android:scrollbarTrackHorizontal="@null"
+                android:scrollbarTrackVertical="@null"
+                android:text="@{release.tagName}"
+                android:textAlignment="center"
+                android:textColor="@color/primary"
+                android:textColorHighlight="@null"
+                android:textColorHint="@null"
+                android:textColorLink="@null"
+                android:textCursorDrawable="@null"
+                android:textSize="16sp"
+                android:textStyle="bold|italic"
+                android:gravity="center"
+                android:layout_gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_new_release"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/new_version"
+                app:layout_constraintStart_toStartOf="@+id/new_version"
+                app:layout_constraintTop_toBottomOf="@+id/new_version">
+
+            <carbon.widget.TextView
+                    android:id="@+id/body"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:scrollbarThumbHorizontal="@null"
+                    android:scrollbarThumbVertical="@null"
+                    android:scrollbarTrackHorizontal="@null"
+                    android:scrollbarTrackVertical="@null"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary"
+                    android:textColorHighlight="@null"
+                    android:textColorHint="@null"
+                    android:textColorLink="@null"
+                    android:textCursorDrawable="@null"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:id="@+id/update_now_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/primary_dark"
+                android:clickable="true"
+                android:elegantTextHeight="true"
+                android:focusable="true"
+                android:scrollbarThumbHorizontal="@null"
+                android:scrollbarThumbVertical="@null"
+                android:scrollbarTrackHorizontal="@null"
+                android:scrollbarTrackVertical="@null"
+                android:text="@string/update_now"
+                android:textAllCaps="false"
+                android:textColor="@color/synthwave_yellow"
+                android:textColorHighlight="@null"
+                android:textColorHint="@null"
+                android:textColorLink="@null"
+                android:textCursorDrawable="@null"
+                android:textSize="14sp"
+                android:textStyle="bold|italic"
+                android:gravity="center"
+                android:layout_gravity="center"
+                app:elevation="20dp"
+                app:rippleColor="@color/primary_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/scroll_new_release"
+                app:layout_constraintTop_toBottomOf="@+id/scroll_new_release" />
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/update_later_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/primary_dark"
+                android:clickable="true"
+                android:elegantTextHeight="true"
+                android:focusable="true"
+                android:scrollbarThumbHorizontal="@null"
+                android:scrollbarThumbVertical="@null"
+                android:scrollbarTrackHorizontal="@null"
+                android:scrollbarTrackVertical="@null"
+                android:text="@string/later"
+                android:textAllCaps="false"
+                android:textColor="@color/synthwave_yellow"
+                android:textColorHighlight="@null"
+                android:textColorHint="@null"
+                android:textColorLink="@null"
+                android:textCursorDrawable="@null"
+                android:textSize="14sp"
+                android:textStyle="bold|italic"
+                android:gravity="center"
+                android:layout_gravity="center"
+                app:carbon_animateColorChanges="true"
+                app:carbon_cornerRadius="12dp"
+                app:carbon_elevation="2dp"
+                app:carbon_elevationAmbientShadowColor="@color/primary_dark"
+                app:carbon_elevationShadowColor="@color/primary_dark"
+                app:carbon_elevationSpotShadowColor="@color/primary_dark"
+                app:carbon_rippleColor="@color/primary_dark"
+                app:carbon_rippleStyle="over"
+                app:carbon_tint="@color/primary_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/scroll_new_release"
+                app:layout_constraintTop_toBottomOf="@+id/scroll_new_release" />
+
+    </carbon.widget.ConstraintLayout>
+</layout>

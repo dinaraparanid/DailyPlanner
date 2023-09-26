@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
     id("com.google.devtools.ksp")
     kotlin("kapt")
 }
@@ -39,10 +38,12 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -71,10 +72,12 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     implementation("com.google.devtools.ksp:symbol-processing-api:1.9.10-1.0.13")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
 
     implementation("com.vmadalin:easypermissions-ktx:1.0.0")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
 
     arrayOf(
         "io.noties.markwon:core:4.6.2",
