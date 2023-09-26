@@ -22,8 +22,9 @@ private suspend fun GitHubApi.getLatestReleaseAsync() = coroutineScope {
     async(Dispatchers.IO) { getReleases().body()?.first() }
 }
 
-internal suspend inline fun GitHubApi.checkForUpdatesAsync() =
+internal suspend inline fun GitHubApi.checkForUpdatesAsync() = runCatching {
     getLatestReleaseAsync().await()?.takeIf { it.tagName > CURRENT_VERSION }
+}.getOrNull()
 
 inline val githubRetrofit
     get() = Retrofit.Builder()
