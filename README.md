@@ -76,11 +76,11 @@ Application supports both *simple* and *dated notes* + *regularity*
 4. Notes regularity (daily, weekly, monthly, yearly, none)
 5. Notes cancellation and status change (is done or not)
 6. Notifications and dated notes' status updates after them
+7. Check for updates
 
 ### **TODO:**
-1. Check for updates
-2. Image support
-3. Notifications' grouping (folders)
+1. Image support
+2. Notifications' grouping (folders)
 
 ## **System Requirements**
 **Android 5.0** or higher
