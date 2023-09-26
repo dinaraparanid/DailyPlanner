@@ -32,6 +32,7 @@
     <string name="notifications_required">Notifications are required for dated notes</string>
     <string name="update_now">Update now</string>
     <string name="later">Later</string>
+    <string name="update_available">Update Available</string>
     <string-array name="note_types">
         <item>Simple</item>
         <item>Dated</item>

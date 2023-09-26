@@ -24,7 +24,7 @@
                 android:scrollbarThumbVertical="@null"
                 android:scrollbarTrackHorizontal="@null"
                 android:scrollbarTrackVertical="@null"
-                android:text="@{release.tagName}"
+                android:text="@string/update_available"
                 android:textAlignment="center"
                 android:textColor="@color/primary"
                 android:textColorHighlight="@null"
