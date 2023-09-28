@@ -34,10 +34,10 @@ class MainFragment : Fragment() {
         binding.notesPager.adapter = MainPagerAdapter(requireActivity())
 
         TabLayoutMediator(binding.tabLayout, binding.notesPager) { tab, position ->
-            tab.setText(
+            tab.setCustomView(
                 when (position) {
-                    0 -> R.string.simple
-                    1 -> R.string.dated
+                    0 -> R.layout.tab_simple_notes
+                    1 -> R.layout.tab_dated_notes
                     else -> throw IllegalArgumentException("Illegal position in pager's tab")
                 }
             )

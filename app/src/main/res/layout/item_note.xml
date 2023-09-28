@@ -11,6 +11,8 @@
     <carbon.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:carbon_cornerRadiusTopStart="15dp"
+            app:carbon_cornerRadiusBottomEnd="15dp"
             app:carbon_elevation="4dp"
             app:carbon_elevationAmbientShadowColor="@color/primary"
             app:carbon_elevationShadowColor="@color/primary"

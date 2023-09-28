@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<carbon.widget.ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/simple_notes_icon"
+        app:carbon_tint="@color/synthwave_yellow"
+        app:carbon_rippleColor="@color/synthwave_yellow"
+        app:carbon_rippleStyle="over">
+
+</carbon.widget.ImageView>
