@@ -6,12 +6,16 @@ import com.paranid5.daily_planner.data.note.DatedNote
 import com.paranid5.daily_planner.data.note.Note
 import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
-import com.paranid5.daily_planner.domain.utils.ext.toDate
+import com.paranid5.daily_planner.domain.utils.ext.addMonth
+import com.paranid5.daily_planner.domain.utils.ext.addYear
+import com.paranid5.daily_planner.domain.utils.ext.epochSeconds
+import com.paranid5.daily_planner.domain.utils.ext.toInstant
 import com.paranid5.daily_planner.domain.utils.ext.toLocalDateTime
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import java.util.Calendar
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.seconds
 
 inline val Note.dateOrNull
     get() = when (this) {
@@ -39,29 +43,30 @@ inline val Note.repetitionStrRes
     get() = when (val note = this) {
         is DatedNote -> when (note.repetition) {
             Repetition.NoRepetition -> R.string.no_repetition
-            is Repetition.Daily -> R.string.daily
+            Repetition.Daily -> R.string.daily
             Repetition.Weekly -> R.string.weekly
             Repetition.Monthly -> R.string.monthly
             Repetition.Yearly -> R.string.yearly
+            is Repetition.SpecificTime -> R.string.specific_time
         }
 
         is SimpleNote -> R.string.no_repetition
     }
 
 inline val DatedNote.nextAlarmTime: LocalDateTime?
-    get() {
-        val calendar = Calendar.getInstance().apply {
-            time = date.toDate()
-        }
+    get() = when (repetition) {
+        Repetition.NoRepetition -> null
 
-        when (repetition) {
-            Repetition.NoRepetition -> return null
-            Repetition.Daily -> calendar.add(Calendar.DATE, 1)
-            Repetition.Weekly -> calendar.add(Calendar.DATE, 7)
-            Repetition.Monthly -> calendar.add(Calendar.MONTH, 1)
-            Repetition.Yearly -> calendar.add(Calendar.YEAR, 1)
-        }
+        Repetition.Daily -> date.toInstant().plus(1.days).toLocalDateTime()
 
-        calendar.add(Calendar.MONTH, 1)
-        return calendar.toLocalDateTime()
+        Repetition.Weekly -> date.toInstant().plus(7.days).toLocalDateTime()
+
+        Repetition.Monthly -> date.addMonth()
+
+        Repetition.Yearly -> date.addYear()
+
+        is Repetition.SpecificTime -> date
+            .toInstant()
+            .plus(repetition.time.epochSeconds.seconds)
+            .toLocalDateTime()
     }

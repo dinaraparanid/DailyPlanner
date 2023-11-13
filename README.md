@@ -67,7 +67,7 @@ Application supports both *simple* and *dated notes* + *regularity*
 
 ## **Current Status:**
 
-**Alpha V 0.1.0.1**
+**Alpha V 0.1.0.2**
 
 ### **Implemented features:**
 1. Simple and Dated notes

@@ -6,6 +6,8 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 import com.paranid5.daily_planner.data.utils.ext.filledToTimeFormat
+import com.paranid5.daily_planner.data.utils.ext.readLocalDataTime
+import com.paranid5.daily_planner.data.utils.ext.writeLocalDateTime
 import com.paranid5.daily_planner.domain.utils.ext.currentTime
 import kotlinx.datetime.LocalDateTime
 import androidx.room.Entity as RoomEntity
@@ -93,15 +95,7 @@ data class DatedNote(
         id = parcel.readLong(),
         title = parcel.readString() ?: "",
         description = parcel.readString() ?: "",
-        date = parcel.readInt().takeIf { it != -1 }?.let {
-            LocalDateTime(
-                year = it,
-                monthNumber = parcel.readInt(),
-                dayOfMonth = parcel.readInt(),
-                hour = parcel.readInt(),
-                minute = parcel.readInt()
-            )
-        } ?: currentTime,
+        date = parcel.readLocalDataTime() ?: currentTime,
         repetition = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
                 parcel.readParcelable(Repetition::class.java.classLoader, Repetition::class.java)
@@ -118,7 +112,7 @@ data class DatedNote(
         get() = "$dayMessage $timeMessage"
 
     private inline val dayMessage
-        get() = "${date.dayOfMonth.toString().filledToTimeFormat}.${date.monthNumber.toString().filledToTimeFormat}"
+        get() = "${date.dayOfMonth.toString().filledToTimeFormat}.${date.monthNumber.toString().filledToTimeFormat}.${date.year}"
 
     private inline val timeMessage
         get() = "${date.hour.toString().filledToTimeFormat}:${date.minute.toString().filledToTimeFormat}"
@@ -127,15 +121,7 @@ data class DatedNote(
         parcel.writeLong(id)
         parcel.writeString(title)
         parcel.writeString(description)
-
-        date.run {
-            parcel.writeInt(year)
-            parcel.writeInt(monthNumber)
-            parcel.writeInt(dayOfMonth)
-            parcel.writeInt(hour)
-            parcel.writeInt(minute)
-        }
-
+        parcel.writeLocalDateTime(date)
         parcel.writeParcelable(repetition, flags)
         parcel.writeByte(if (isDone) 1 else 0)
     }

@@ -9,6 +9,7 @@ import com.paranid5.daily_planner.data.note.NoteType
 import com.paranid5.daily_planner.data.note.Repetition
 import com.paranid5.daily_planner.data.note.SimpleNote
 import com.paranid5.daily_planner.domain.utils.ext.launchNoteAlarm
+import com.paranid5.daily_planner.domain.utils.ext.toInstant
 import com.paranid5.daily_planner.presentation.UIHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -59,7 +60,7 @@ class AddNoteUIHandler @Inject constructor() : UIHandler {
                     minute = viewModel.timeState.value?.second ?: 0
                 )
 
-                if (date.toInstant(TimeZone.currentSystemDefault()) <= Clock.System.now()) {
+                if (date.toInstant() <= Clock.System.now()) {
                     launch(Dispatchers.Main) {
                         Toast.makeText(
                             context,

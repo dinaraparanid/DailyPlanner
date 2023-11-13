@@ -53,6 +53,8 @@ class AlarmReceiver : BroadcastReceiver(), CoroutineScope by CoroutineScope(Disp
             else -> intent.getParcelableExtra(NOTE_ARG)
         } ?: return
 
+        println(note.repetition)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             createNotificationChannel()
 

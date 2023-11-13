@@ -33,6 +33,7 @@
     <string name="update_now">Update now</string>
     <string name="later">Later</string>
     <string name="update_available">Update Available</string>
+    <string name="specific_time">Specific Time</string>
     <string-array name="note_types">
         <item>Simple</item>
         <item>Dated</item>
